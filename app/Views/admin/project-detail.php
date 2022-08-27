@@ -111,6 +111,54 @@
                         <div class="col-12">
                             <div class="card mb-3 shadow">
                                 <div class="card-header bg-green-custom text-light p-3">
+                                    <p class="m-0"><i class="fa-solid fa-folder-open"></i> &nbsp; Dokumen Notulensi</p>
+                                </div>
+                                <div class="card-body p-2 p-sm-3 table-responsive">
+                                    <div class="">
+                                        <table class="table">
+                                            <thead>
+                                                <th>No</th>
+                                                <th>File Name</th>
+                                                <th>Uploader</th>
+                                                <th>Upload Time</th>
+                                                <th>Option</th>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($notes as $key => $notes) {
+                                                ?>
+                                                    <tr>
+                                                        <td><?= $key + 1; ?></td>
+                                                        <td><?= $notes['document_name']; ?></td>
+                                                        <td><?= $notes['uploader']; ?></td>
+                                                        <td><?= date_format(date_create($notes['uploaded_at']), "d/m/Y H:i A"); ?></td>
+                                                        <td>
+                                                            <a href="<?= HOST_URL ?>/admin/projects/delete?notename=<?= $notes['file_name']; ?>&id=<?= $project['id']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Delete</a>
+                                                            <a target="_blank" href="<?= HOST_URL ?>/admin/projects/download?notename=<?= $notes['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Download</a>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="mt-2">
+                                        <form action="<?= HOST_URL ?>/admin/projects/notes/upload" method="POST" enctype="multipart/form-data">
+                                            <input type="text" name="project_id" value="<?= $project['id']; ?>" hidden>
+                                            <input type="text" name="user_id" value="<?= $userData['id']; ?>" hidden>
+                                            <div class="input-group">
+                                                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" name="file2upload" aria-label="Upload">
+                                                <button class="btn btn-green" type="submit" id="inputGroupFileAddon04">Upload</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid mt-3 row mx-0 px-0">
+                        <div class="col-12">
+                            <div class="card mb-3 shadow">
+                                <div class="card-header bg-green-custom text-light p-3">
                                     <p class="m-0"><i class="fa-solid fa-folder-open"></i> &nbsp; Project Files</p>
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">

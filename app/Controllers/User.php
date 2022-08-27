@@ -11,6 +11,7 @@ class User extends BaseController
     protected $projectModel;
     protected $commentModel;
     protected $fileModel;
+    protected $noteModel;
 
     function __construct()
     {
@@ -19,6 +20,7 @@ class User extends BaseController
         $this->projectModel = model('ProjectModel', true, $db);
         $this->commentModel = model('CommentModel', true, $db);
         $this->fileModel = model('FileModel', true, $db);
+        $this->noteModel = model('NoteModel', true, $db);
         helper('download');
     }
 
@@ -64,6 +66,26 @@ class User extends BaseController
 
         $id = $_GET['id'];
 
+        $projectFiles = $this->noteModel->where('project_id', $id)->findAll();
+
+        $arraynotes = [];
+        foreach ($projectFiles as $key => $note) {
+            $user_id = $note['user_id'];
+            $userUploaded = $this->userModel->where('id', $user_id)->find();
+            $notesData = [
+                $key => [
+                    'id' => $note['id'],
+                    'uploader' => $userUploaded[0]['name'],
+                    'user_id' => $note['user_id'],
+                    'project_id' => $note['project_id'],
+                    'document_name' => $note['document_name'],
+                    'file_name' => $note['file_name'],
+                    'uploaded_at' => $note['uploaded_at']
+                ],
+            ];
+            $arraynotes = array_merge($arraynotes, $notesData);
+        }
+
         $projectFiles = $this->fileModel->where('project_id', $id)->findAll();
 
         $arrayfiles = [];
@@ -107,7 +129,8 @@ class User extends BaseController
             'project' => $project,
             'userData' => $userData,
             'commentData' => $arrayComments,
-            'files' => $arrayfiles
+            'files' => $arrayfiles,
+            'notes' => $arraynotes,
         ];
         return view('user/project-detail', $data);
     }
@@ -185,11 +208,16 @@ class User extends BaseController
         // Session Check End
 
 
-        $file_name = $_GET['filename'];
-        $fileData = $this->fileModel->where('file_name', $file_name)->findAll();
-        $document_name = $fileData[0]['document_name'];
-
-
-        return $this->response->download('public/uploads/' . $file_name, null)->setFileName($document_name);
+        if (isset($_GET['filename'])) {
+            $file_name = $_GET['filename'];
+            $fileData = $this->fileModel->where('file_name', $file_name)->findAll();
+            $document_name = $fileData[0]['document_name'];
+            return $this->response->download('public/uploads/' . $file_name, null)->setFileName($document_name);
+        } else if (isset($_GET['notename'])) {
+            $file_name = $_GET['notename'];
+            $fileData = $this->noteModel->where('file_name', $file_name)->findAll();
+            $document_name = $fileData[0]['document_name'];
+            return $this->response->download('public/uploads/notes/' . $file_name, null)->setFileName($document_name);
+        }
     }
 }

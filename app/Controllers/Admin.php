@@ -9,6 +9,7 @@ class Admin extends BaseController
     protected $projectModel;
     protected $commentModel;
     protected $fileModel;
+    protected $noteModel;
 
     function __construct()
     {
@@ -17,6 +18,7 @@ class Admin extends BaseController
         $this->projectModel = model('ProjectModel', true, $db);
         $this->commentModel = model('CommentModel', true, $db);
         $this->fileModel = model('FileModel', true, $db);
+        $this->noteModel = model('NoteModel', true, $db);
     }
 
     public function index()
@@ -317,6 +319,26 @@ class Admin extends BaseController
             $arrayfiles = array_merge($arrayfiles, $filesData);
         }
 
+        $projectNotes = $this->noteModel->where('project_id', $id)->findAll();
+
+        $arraynotes = [];
+        foreach ($projectNotes as $key => $note) {
+            $user_id = $note['user_id'];
+            $userUploaded = $this->userModel->where('id', $user_id)->find();
+            $notesData = [
+                $key => [
+                    'id' => $note['id'],
+                    'uploader' => $userUploaded[0]['name'],
+                    'user_id' => $note['user_id'],
+                    'project_id' => $note['project_id'],
+                    'document_name' => $note['document_name'],
+                    'file_name' => $note['file_name'],
+                    'uploaded_at' => $note['uploaded_at']
+                ],
+            ];
+            $arraynotes = array_merge($arraynotes, $notesData);
+        }
+
         $userComment = $this->commentModel->where('project_id', $id)->orderBy('id', 'desc')->findAll();
 
         $arrayComments = [];
@@ -340,7 +362,8 @@ class Admin extends BaseController
             'project' => $project,
             'userData' => $userData,
             'commentData' => $arrayComments,
-            'files' => $arrayfiles
+            'files' => $arrayfiles,
+            'notes' => $arraynotes
         ];
         return view('admin/project-detail', $data);
     }
@@ -446,12 +469,17 @@ class Admin extends BaseController
         // Session Check End
 
 
-        $file_name = $_GET['filename'];
-        $fileData = $this->fileModel->where('file_name', $file_name)->findAll();
-        $document_name = $fileData[0]['document_name'];
-
-
-        return $this->response->download('public/uploads/' . $file_name, null)->setFileName($document_name);
+        if (isset($_GET['filename'])) {
+            $file_name = $_GET['filename'];
+            $fileData = $this->fileModel->where('file_name', $file_name)->findAll();
+            $document_name = $fileData[0]['document_name'];
+            return $this->response->download('public/uploads/' . $file_name, null)->setFileName($document_name);
+        } else if (isset($_GET['notename'])) {
+            $file_name = $_GET['notename'];
+            $fileData = $this->noteModel->where('file_name', $file_name)->findAll();
+            $document_name = $fileData[0]['document_name'];
+            return $this->response->download('public/uploads/notes/' . $file_name, null)->setFileName($document_name);
+        }
     }
 
     public function projectsDelete()
@@ -467,12 +495,16 @@ class Admin extends BaseController
         // Session Check End
 
 
-        $file_name = $_GET['filename'];
         $id = $_GET['id'];
-
-
-        $this->fileModel->where('file_name', $file_name)->delete();
-        unlink('public/uploads/' . $file_name);
+        if (isset($_GET['filename'])) {
+            $file_name = $_GET['filename'];
+            $this->fileModel->where('file_name', $file_name)->delete();
+            unlink('public/uploads/' . $file_name);
+        } else if (isset($_GET['notename'])) {
+            $file_name = $_GET['notename'];
+            $this->noteModel->where('file_name', $file_name)->delete();
+            unlink('public/uploads/notes/' . $file_name);
+        }
 
         return redirect()->to(HOST_URL . '/admin/projects/detail?id=' . $id);
     }
@@ -531,11 +563,49 @@ class Admin extends BaseController
 
         $id = $_POST['id'];
         $data = [
-            'email' => '',
+            'email' => null,
             'status' => 'Deleted',
-            'password' => '',
-            'role' => 'Deleted_user'
+            'password' => null,
+            'role' => 'Deleted_user',
+            'nip' => null,
+            'nik' => null,
+            'position' => null,
+            'instance' => null
         ];
         $this->userModel->where('id', $id)->set($data)->update();
+    }
+
+    public function projectsNotesUpload()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+
+        $user_id = $_POST['user_id'];
+        $project_id = $_POST['project_id'];
+
+        $file = $this->request->getFile('file2upload');
+        $originalName = $file->getClientName();
+        $newName = $file->getRandomName();
+
+
+        $data = [
+            'document_name' => $originalName,
+            'file_name' => $newName,
+            'project_id' => $project_id,
+            'user_id' => $user_id
+        ];
+
+        if ($file->move("public/uploads/notes/", $newName)) {
+            $this->noteModel->insert($data);
+            return redirect()->to(HOST_URL . '/admin/projects/detail?id=' . $project_id);
+        } else {
+            echo "failed";
+        }
     }
 }

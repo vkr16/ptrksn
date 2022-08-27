@@ -93,6 +93,42 @@
                         <div class="col-12">
                             <div class="card mb-3 shadow">
                                 <div class="card-header bg-dark text-light p-3">
+                                    <p class="m-0"><i class="fa-solid fa-folder-open"></i> &nbsp; Dokumen Notulensi</p>
+                                </div>
+                                <div class="card-body p-2 p-sm-3 table-responsive">
+                                    <div class="">
+                                        <table class="table">
+                                            <thead>
+                                                <th>No</th>
+                                                <th>Nama File</th>
+                                                <th>Pengunggah</th>
+                                                <th>Diunggah Pada</th>
+                                                <th>Opsi</th>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($notes as $key => $note) {
+                                                ?>
+                                                    <tr>
+                                                        <td><?= $key + 1; ?></td>
+                                                        <td><?= $note['document_name']; ?></td>
+                                                        <td><?= $note['uploader']; ?></td>
+                                                        <td><?= date_format(date_create($note['uploaded_at']), "d/m/Y H:i A"); ?></td>
+                                                        <td>
+                                                            <a target="_blank" href="<?= HOST_URL ?>/user/projects/download?notename=<?= $note['file_name']; ?>" class="btn btn-sm btn-dark"><i class="fa-solid fa-download"></i> Download</a>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid mt-3 row mx-0 px-0">
+                        <div class="col-12">
+                            <div class="card mb-3 shadow">
+                                <div class="card-header bg-dark text-light p-3">
                                     <p class="m-0"><i class="fa-solid fa-folder-open"></i> &nbsp; Project Files</p>
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">
@@ -100,10 +136,10 @@
                                         <table class="table">
                                             <thead>
                                                 <th>No</th>
-                                                <th>File Name</th>
-                                                <th>Uploader</th>
-                                                <th>Upload Time</th>
-                                                <th>Option</th>
+                                                <th>Nama File</th>
+                                                <th>Pengunggah</th>
+                                                <th>Diunggah Pada</th>
+                                                <th>Opsi</th>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($files as $key => $file) {

@@ -46,6 +46,7 @@ $routes->post('/admin/projects/add', 'Admin::projectsAdd');
 $routes->post('/admin/projects/addComment', 'Admin::projectsAddComment');
 $routes->post('/admin/projects/update', 'Admin::projectsUpdate');
 $routes->post('/admin/projects/upload', 'Admin::projectsUpload');
+$routes->post('/admin/projects/notes/upload', 'Admin::projectsNotesUpload');
 $routes->get('/admin/projects/download', 'Admin::projectsDownload');
 $routes->get('/admin/projects/delete', 'Admin::projectsDelete');
 $routes->post('/admin/projects/comments/delete', 'Admin::commentsDelete');

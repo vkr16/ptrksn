@@ -78,9 +78,6 @@
                                                         <td><?= $user['status'] == 'Active' ? '<i class="fa-solid fa-circle-check text-success"></i>' : '<i class="fa-solid fa-circle-pause text-danger"></i>'; ?></td>
                                                         <td>
                                                             <div class="dropdown">
-                                                                <!-- <button type="button" class="btn btn-green btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    Kelola
-                                                                </button> -->
                                                                 <button class="btn btn-sm" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                                                 <ul class="dropdown-menu">
                                                                     <li>
