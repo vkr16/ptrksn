@@ -7,7 +7,7 @@
             <i class="fa-solid fa-user-tie me-1"></i> <?= $userData['name']; ?>
         </span>
         <ul class="dropdown-menu mt-2 border-0">
-            <li><a class="dropdown-item" href="<?= HOST_URL ?>/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> &nbsp; Logout </a></li>
+            <li><a class="dropdown-item" href="<?= HOST_URL ?>/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> &nbsp; Keluar </a></li>
         </ul>
     </div>
 </div>

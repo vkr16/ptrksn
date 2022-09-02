@@ -7,18 +7,25 @@ class Admin extends BaseController
     protected $session;
     protected $userModel;
     protected $projectModel;
+    protected $projectfileModel;
     protected $commentModel;
-    protected $fileModel;
-    protected $noteModel;
+    protected $eventModel;
+    protected $eventfileModel;
+    protected $meetingModel;
+    protected $attendanceModel;
+
 
     function __construct()
     {
         $this->session = \Config\Services::session();
         $this->userModel = model('UserModel', true, $db);
         $this->projectModel = model('ProjectModel', true, $db);
+        $this->projectfileModel = model('ProjectFileModel', true, $db);
         $this->commentModel = model('CommentModel', true, $db);
-        $this->fileModel = model('FileModel', true, $db);
-        $this->noteModel = model('NoteModel', true, $db);
+        $this->eventModel = model('EventModel', true, $db);
+        $this->eventfileModel = model('EventFileModel', true, $db);
+        $this->meetingModel = model('MeetingModel', true, $db);
+        $this->attendanceModel = model('AttendanceModel', true, $db);
     }
 
     public function index()
@@ -69,11 +76,13 @@ class Admin extends BaseController
 
         $builder->select('instance');       // names of your columns, single string, separated by a comma
         $builder->distinct();       // names of your columns, single string, separated by a comma
+        $builder->where('instance !=', null);      // names of your columns, single string, separated by a comma
         $instances = $builder->get();
         $instances = $instances->getResult();
 
         $builder->select('position');       // names of your columns, single string, separated by a comma
-        $builder->distinct();       // names of your columns, single string, separated by a comma
+        $builder->distinct();
+        $builder->where('position !=', null);      // names of your columns, single string, separated by a comma
         $positions = $builder->get();
         $positions = $positions->getResult();
         $data = [
@@ -299,12 +308,15 @@ class Admin extends BaseController
 
         $id = $_GET['id'];
 
-        $projectFiles = $this->fileModel->where('project_id', $id)->findAll();
+        $projectFiles = $this->projectfileModel->where("project_id = $id")->findAll();
+        if ($projectFiles == null) {
+            return redirect()->to(HOST_URL);
+        }
 
         $arrayfiles = [];
         foreach ($projectFiles as $key => $file) {
             $user_id = $file['user_id'];
-            $userUploaded = $this->userModel->where('id', $user_id)->find();
+            $userUploaded = $this->userModel->where("id = $user_id")->find();
             $filesData = [
                 $key => [
                     'id' => $file['id'],
@@ -313,30 +325,10 @@ class Admin extends BaseController
                     'project_id' => $file['project_id'],
                     'document_name' => $file['document_name'],
                     'file_name' => $file['file_name'],
-                    'uploaded_at' => $file['uploaded_at']
+                    'upload_time' => $file['upload_time']
                 ],
             ];
             $arrayfiles = array_merge($arrayfiles, $filesData);
-        }
-
-        $projectNotes = $this->noteModel->where('project_id', $id)->findAll();
-
-        $arraynotes = [];
-        foreach ($projectNotes as $key => $note) {
-            $user_id = $note['user_id'];
-            $userUploaded = $this->userModel->where('id', $user_id)->find();
-            $notesData = [
-                $key => [
-                    'id' => $note['id'],
-                    'uploader' => $userUploaded[0]['name'],
-                    'user_id' => $note['user_id'],
-                    'project_id' => $note['project_id'],
-                    'document_name' => $note['document_name'],
-                    'file_name' => $note['file_name'],
-                    'uploaded_at' => $note['uploaded_at']
-                ],
-            ];
-            $arraynotes = array_merge($arraynotes, $notesData);
         }
 
         $userComment = $this->commentModel->where('project_id', $id)->orderBy('id', 'desc')->findAll();
@@ -358,12 +350,17 @@ class Admin extends BaseController
             $arrayComments = array_merge($arrayComments, $commentsData);
         }
         $project = $this->projectModel->find($id);
+
+
+        $events = $this->eventModel->where("project_id = $id")->find();
+
+
         $data = [
             'project' => $project,
             'userData' => $userData,
             'commentData' => $arrayComments,
             'files' => $arrayfiles,
-            'notes' => $arraynotes
+            'events' => $events
         ];
         return view('admin/project-detail', $data);
     }
@@ -408,12 +405,10 @@ class Admin extends BaseController
         $id = $_POST['project_id'];
         $name = $_POST['name'];
         $description = $_POST['description'];
-        $progress = $_POST['progress'];
 
         $data = [
             'name' => $name,
             'description' => $description,
-            'progress' => $progress
         ];
 
         $this->projectModel->where('id', $id)->set($data)->update();
@@ -449,7 +444,7 @@ class Admin extends BaseController
         ];
 
         if ($file->move("public/uploads/", $newName)) {
-            $this->fileModel->insert($data);
+            $this->projectfileModel->insert($data);
             return redirect()->to(HOST_URL . '/admin/projects/detail?id=' . $project_id);
         } else {
             echo "failed";
@@ -471,7 +466,7 @@ class Admin extends BaseController
 
         if (isset($_GET['filename'])) {
             $file_name = $_GET['filename'];
-            $fileData = $this->fileModel->where('file_name', $file_name)->findAll();
+            $fileData = $this->projectfileModel->where('file_name', $file_name)->findAll();
             $document_name = $fileData[0]['document_name'];
             return $this->response->download('public/uploads/' . $file_name, null)->setFileName($document_name);
         } else if (isset($_GET['notename'])) {
@@ -484,29 +479,24 @@ class Admin extends BaseController
 
     public function projectsDelete()
     {
-        // Session Check
-        if ($this->session->has('fw2_webclient_session')) {
-            if ($this->session->get('fw2_webclient_role') == 'User') {
-                return redirect()->to(HOST_URL . '/user');
-            }
-        } else {
-            return redirect()->to(HOST_URL . '/login');
-        }
-        // Session Check End
+
 
 
         $id = $_GET['id'];
         if (isset($_GET['filename'])) {
             $file_name = $_GET['filename'];
-            $this->fileModel->where('file_name', $file_name)->delete();
+            $this->projectfileModel->where('file_name', $file_name)->delete();
             unlink('public/uploads/' . $file_name);
         } else if (isset($_GET['notename'])) {
             $file_name = $_GET['notename'];
             $this->noteModel->where('file_name', $file_name)->delete();
             unlink('public/uploads/notes/' . $file_name);
         }
-
-        return redirect()->to(HOST_URL . '/admin/projects/detail?id=' . $id);
+        if (isset($_GET['u'])) {
+            return redirect()->to(HOST_URL . '/user/projects/detail?id=' . $id);
+        } else {
+            return redirect()->to(HOST_URL . '/admin/projects/detail?id=' . $id);
+        }
     }
 
     public function commentsDelete()
@@ -538,13 +528,26 @@ class Admin extends BaseController
         $id = $_POST['id'];
 
         $this->commentModel->where('project_id', $id)->delete();
-        $files = $this->fileModel->where('project_id', $id)->find();
+        $pfiles = $this->projectfileModel->where('project_id', $id)->find();
 
-        foreach ($files as $index => $file) {
+        foreach ($pfiles as $index => $file) {
             $file_name = $file['file_name'];
-            $this->fileModel->where('file_name', $file_name)->delete();
+            $this->projectfileModel->where('file_name', $file_name)->delete();
             unlink('public/uploads/' . $file_name);
         }
+
+        $events = $this->eventModel->where("project_id", $id)->find();
+        foreach ($events as $key => $event) {
+            $event_id = $event['id'];
+            $efiles = $this->eventfileModel->where('event_id', $event_id)->find();
+            foreach ($efiles as $index => $file) {
+                $file_name = $file['file_name'];
+                $this->eventfileModel->where('file_name', $file_name)->delete();
+                unlink('public/uploads/event-files/' . $file_name);
+            }
+        }
+
+        $this->eventModel->where('project_id', $id)->delete();
 
         $this->projectModel->where('id', $id)->delete();
     }
@@ -606,6 +609,496 @@ class Admin extends BaseController
             return redirect()->to(HOST_URL . '/admin/projects/detail?id=' . $project_id);
         } else {
             echo "failed";
+        }
+    }
+
+    public function pakhar()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        // On Session User Data
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+
+        $projects = $this->projectModel->findAll();
+
+        $data = [
+            'projects' => $projects,
+            'userData' => $userData
+        ];
+
+        return view('admin/pak-harmonisasi', $data);
+    }
+
+    public function addEvent()
+    {
+
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+
+        $project_id = $_POST['project_id'];
+        $name = $_POST['eventName'];
+        $date = $_POST['eventDate'];
+        $description = $_POST['eventDescription'];
+
+        $tgl = substr($date, 0, 2);
+        $bln = substr($date, 3, 2);
+        $thn = substr($date, 6, 4);
+
+        $newformat = $thn . '-' . $bln . '-' . $tgl;
+        $date = date_format(date_create($newformat), 'Y-m-d');
+
+        $data = [
+            'project_id' => $project_id,
+            'name' => $name,
+            'commit_time' => $date,
+            'description' => $description
+        ];
+        $this->eventModel->insert($data);
+        return redirect()->to(HOST_URL . '/admin/projects/detail?id=' . $project_id);
+    }
+    public function editEvent()
+    {
+
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+
+        $project_id = $_POST['project_id'];
+        $event_id = $_POST['event_id'];
+        $name = $_POST['eventName'];
+        $date = $_POST['eventDate'];
+        $description = $_POST['eventDescription'];
+
+        $tgl = substr($date, 0, 2);
+        $bln = substr($date, 3, 2);
+        $thn = substr($date, 6, 4);
+
+        $newformat = $thn . '-' . $bln . '-' . $tgl;
+        $date = date_format(date_create($newformat), 'Y-m-d');
+
+        $data = [
+            'name' => $name,
+            'commit_time' => $date,
+            'description' => $description
+        ];
+        $this->eventModel->where('id', $event_id)->set($data)->update();
+        return redirect()->to(HOST_URL . '/admin/projects/detail?id=' . $project_id);
+    }
+
+    public function projectDocuments()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        // On Session User Data
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+
+
+        if (isset($_GET['pro']) && $_GET['pro'] != '') {
+            $project_id = $_GET['pro'];
+            if (isset($_GET['pak'])) {
+                $pak_id = $_GET['pak'];
+                $docs = $this->pakfilesModel->where('paks_id', $pak_id)->findAll();
+
+                $arrayfiles = [];
+                foreach ($docs as $key => $file) {
+                    $user_id = $file['user_id'];
+                    $userUploaded = $this->userModel->where('id', $user_id)->find();
+                    $filesData = [
+                        $key => [
+                            'id' => $file['id'],
+                            'uploader' => $userUploaded[0]['name'],
+                            'user_id' => $file['user_id'],
+                            'paks_id' => $file['paks_id'],
+                            'document_name' => $file['document_name'],
+                            'file_name' => $file['file_name'],
+                            'uploaded_at' => $file['uploaded_at']
+                        ],
+                    ];
+                    $arrayfiles = array_merge($arrayfiles, $filesData);
+                }
+            } elseif (isset($_GET['har'])) {
+                $har_id = $_GET['har'];
+                $docs = $this->harfilesModel->where('hars_id', $har_id)->findAll();
+
+                $arrayfiles = [];
+                foreach ($docs as $key => $file) {
+                    $user_id = $file['user_id'];
+                    $userUploaded = $this->userModel->where('id', $user_id)->find();
+                    $filesData = [
+                        $key => [
+                            'id' => $file['id'],
+                            'uploader' => $userUploaded[0]['name'],
+                            'user_id' => $file['user_id'],
+                            'paks_id' => $file['paks_id'],
+                            'document_name' => $file['document_name'],
+                            'file_name' => $file['file_name'],
+                            'uploaded_at' => $file['uploaded_at']
+                        ],
+                    ];
+                    $arrayfiles = array_merge($arrayfiles, $filesData);
+                }
+            }
+        }
+        $data = [
+            'userData' => $userData,
+            'docs' => $arrayfiles,
+        ];
+
+        return view('admin/documents', $data);
+    }
+
+
+    public function projectsEvent()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        // On Session User Data
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+
+
+        if (isset($_GET['p']) && isset($_GET['e']) && $_GET['p'] != '' && $_GET['e'] != '') {
+
+            $event_id = $_GET['e'];
+            $docs = $this->eventfileModel->where("event_id", $event_id)->find();
+            $event = $this->eventModel->where("id", $event_id)->find();
+
+
+            $arrayfiles = [];
+            foreach ($docs as $key => $file) {
+                $user_id = $file['user_id'];
+                $userUploaded = $this->userModel->where('id', $user_id)->find();
+                $filesData = [
+                    $key => [
+                        'id' => $file['id'],
+                        'uploader' => $userUploaded[0]['name'],
+                        'user_id' => $file['user_id'],
+                        'event_id' => $file['event_id'],
+                        'document_name' => $file['document_name'],
+                        'file_name' => $file['file_name'],
+                        'upload_time' => $file['upload_time']
+                    ],
+                ];
+                $arrayfiles = array_merge($arrayfiles, $filesData);
+            }
+
+            $data = [
+                'event' => $event,
+                'eventfiles' => $arrayfiles,
+                'userData' => $userData
+            ];
+
+            return view('admin/documents', $data);
+        } else {
+            return redirect()->to(HOST_URL);
+        }
+    }
+
+    public function eventsUpload()
+    {
+
+        $user_id = $_POST['user_id'];
+        $event_id = $_POST['event_id'];
+        $project_id = $_POST['project_id'];
+
+
+        $file = $this->request->getFile('file2upload');
+        $originalName = $file->getClientName();
+        $newName = $file->getRandomName();
+
+
+        $data = [
+            'document_name' => $originalName,
+            'file_name' => $newName,
+            'event_id' => $event_id,
+            'user_id' => $user_id
+        ];
+
+        if ($file->move("public/uploads/event-files/", $newName)) {
+            $this->eventfileModel->insert($data);
+            if (isset($_POST['u'])) {
+                return redirect()->to(HOST_URL . '/user/projects/event?p=' . $project_id . '&e=' . $event_id);
+            } else {
+                return redirect()->to(HOST_URL . '/admin/projects/event?p=' . $project_id . '&e=' . $event_id);
+            }
+        } else {
+            echo "failed";
+        }
+    }
+
+    public function eventsDelete()
+    {
+
+        $id = $_GET['e'];
+        $pid = $_GET['p'];
+        if (isset($_GET['filename'])) {
+            $file_name = $_GET['filename'];
+            $this->eventfileModel->where('file_name', $file_name)->delete();
+            unlink('public/uploads/event-files/' . $file_name);
+        }
+        if (isset($_GET['u'])) {
+            return redirect()->to(HOST_URL . '/user/projects/event?e=' . $id . '&p=' . $pid);
+        } else {
+            return redirect()->to(HOST_URL . '/admin/projects/event?e=' . $id . '&p=' . $pid);
+        }
+    }
+
+    public function eventsDownload()
+    {
+        if (isset($_GET['filename'])) {
+            $file_name = $_GET['filename'];
+            $fileData = $this->eventfileModel->where('file_name', $file_name)->findAll();
+            $document_name = $fileData[0]['document_name'];
+            return $this->response->download('public/uploads/event-files/' . $file_name, null)->setFileName($document_name);
+        }
+    }
+
+
+    public function meetings()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        // On Session User Data
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+
+        $meetings = $this->meetingModel->findAll();
+
+        $count = array();
+        foreach ($meetings as $key => $meeting) {
+            $meeting_id = $meeting['id'];
+            $attendees = $this->attendanceModel->where("meeting_id", $meeting_id)->find();
+            $attendeescount = count($attendees);
+            array_push($count, $attendeescount);
+        }
+        $data = [
+            'userData' => $userData,
+            'meetings' => $meetings,
+            'attendance' => $count
+        ];
+
+        return view('admin/meetings', $data);
+    }
+
+    public function meetingsAdd()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        $name = $_POST['agendaName'];
+        $date = $_POST['agendaDate'];
+        $hour = $_POST['hour'];
+        $minute = $_POST['minute'];
+
+        $tgl = substr($date, 0, 2);
+        $bln = substr($date, 3, 2);
+        $thn = substr($date, 6, 4);
+
+        $datetime = $thn . '-' . $bln . '-' . $tgl . ' ' . $hour . ':' . $minute;
+
+        $data = [
+            'name' => $name,
+            'datetime' => $datetime,
+            'status' => 'closed'
+        ];
+
+        if ($this->meetingModel->insert($data)) {
+            return redirect()->to(HOST_URL . '/admin/meetings');
+        }
+    }
+
+    public function meetingsAttendance()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        // On Session User Data
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+
+        $meeting_id = $_GET['m'];
+        $attendance = $this->attendanceModel->where("meeting_id", $meeting_id)->find();
+
+        $attendanceData = [];
+        foreach ($attendance as $key => $participant) {
+            $user_id = $participant['user_id'];
+
+            $user = $this->userModel->where('id', $user_id)->find();
+            $participantData = [
+                $key => [
+                    'id' => $user_id,
+                    'name' => $user[0]['name'],
+                    'nip' => $user[0]['nip'],
+                    'nik' => $user[0]['nik'],
+                    'position' => $user[0]['position'],
+                    'instance' => $user[0]['instance'],
+                    'email' => $user[0]['email'],
+                    'signature' => $participant['signature'],
+                    'meeting_id' => $participant['meeting_id'],
+                ],
+            ];
+            $attendanceData = array_merge($attendanceData, $participantData);
+        }
+        $meetingData = $this->meetingModel->where('id', $meeting_id)->findAll();
+
+        $data = [
+            'userData' => $userData,
+            'attendances' => $attendanceData,
+            'meeting' => $meetingData
+        ];
+
+        return view('admin/attendance', $data);
+    }
+
+    public function meetingsAttopen()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        if (isset($_GET['m'])) {
+            $mid = $_GET['m'];
+
+            $this->meetingModel->where('id', $mid)->set('status', 'open')->update();
+            return redirect()->to(HOST_URL . '/admin/meetings/attendance?m=' . $mid);
+        } else {
+            return redirect()->to(HOST_URL . '/admin/meetings');
+        }
+    }
+
+    public function meetingsAttclose()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        if (isset($_GET['m'])) {
+            $mid = $_GET['m'];
+            $this->meetingModel->where('id', $mid)->set('status', 'closed')->update();
+            return redirect()->to(HOST_URL . '/admin/meetings/attendance?m=' . $mid);
+        } else {
+            return redirect()->to(HOST_URL . '/admin/meetings');
+        }
+    }
+
+    public function eventPurge()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        $event_id = $_POST['event_id'];
+        $project_id = $_POST['project_id'];
+
+        $files = $this->eventfileModel->where('event_id', $event_id)->find();
+
+        foreach ($files as $key => $file) {
+            $filename = $file['file_name'];
+            unlink('public/uploads//event-files/' . $filename);
+        }
+
+        $this->eventfileModel->where('event_id', $event_id)->delete();
+        if ($this->eventModel->where('id', $event_id)->delete()) {
+            return "ok";
+        } else {
+            return "failed";
+        }
+    }
+
+    public function meetingsDelete()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        $mid = $_POST['meeting_id'];
+
+        if ($this->attendanceModel->where('meeting_id', $mid)->delete() &&  $this->meetingModel->where('id', $mid)->delete()) {
+            return 'ok';
+        } else {
+            return 'failed';
         }
     }
 }

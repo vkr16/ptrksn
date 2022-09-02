@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Project Detail</title>
+    <title>Admin | Detail Kegiatan</title>
     <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
@@ -13,6 +13,9 @@
 
     <!-- Datatables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
+
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/bootstrap-datepicker3.min.css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
@@ -22,13 +25,8 @@
     <script>
         tinymce.init({
             selector: 'textarea.tinymce',
-            plugins: [
-                'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
-                'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify |' +
-                'bullist numlist checklist outdent indent | removeformat | code table help'
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+            toolbar_mode: 'floating',
         })
         tinymce.init({
             selector: 'textarea#comment',
@@ -50,12 +48,12 @@
             <div class="w-100">
                 <div class="container-fluid">
                     <div class="col-md-12 d-flex justify-content-between align-items-center p-3 my-2">
-                        <p class="fs-3 fw-normal m-0">Projects Details</p>
+                        <p class="fs-3 fw-normal m-0">Detail Kegiatan</p>
                         <nav aria-label="breadcrumb" class="m-0">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">Admin</li>
-                                <li class="breadcrumb-item">Projects</li>
-                                <li class="breadcrumb-item active" aria-current="page">Project Details</li>
+                                <li class="breadcrumb-item"><a href="<?= HOST_URL ?>/admin/projects">Kegiatan</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Detail Kegiatan</li>
                             </ol>
                         </nav>
                     </div>
@@ -65,11 +63,11 @@
                         <div class="col-12">
                             <div class="card mb-3 shadow">
                                 <div class="card-header bg-green-custom text-light p-3 d-flex justify-content-between align-items-center">
-                                    <p class="m-0"><i class="fa-solid fa-diagram-project"></i> &nbsp; Project Information</p>
+                                    <p class="m-0"><i class="fa-solid fa-diagram-project"></i> &nbsp; Informasi Kegiatan</p>
                                     <span>
-                                        <button id="deleteProjectButton" class="btn btn-sm btn-warning" onclick="deletePrompt(<?= $project['id']; ?>)"><i class="fa-solid fa-trash-alt"></i>&nbsp; Delete Project</button>
-                                        <button id="trigger-open" class="btn btn-sm btn-light" onclick="editMode()"><i class="fa-solid fa-file-pen"></i>&nbsp; Edit Mode</button>
-                                        <button id="trigger-close" class="btn btn-sm btn-light" onclick="viewMode()" style="display: none"><i class="fa-solid fa-glasses"></i>&nbsp; View Mode</button>
+                                        <button id="deleteProjectButton" class="btn btn-sm btn-warning" onclick="deletePrompt(<?= $project['id']; ?>)"><i class="fa-solid fa-trash-alt"></i>&nbsp; Hapus Kegiatan</button>
+                                        <button id="trigger-open" class="btn btn-sm btn-light" onclick="editMode()"><i class="fa-solid fa-file-pen"></i>&nbsp; Mode Edit</button>
+                                        <button id="trigger-close" class="btn btn-sm btn-light" onclick="viewMode()" style="display: none"><i class="fa-solid fa-glasses"></i>&nbsp; Mode Baca</button>
                                     </span>
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">
@@ -77,80 +75,68 @@
 
                                         <form action="<?= HOST_URL ?>/admin/projects/update" method="POST">
                                             <input type="text" name="project_id" hidden value="<?= $project['id']; ?>">
-                                            <h5 class="fw-normal m-0 p-0 " id="name">
+                                            <p class="fw-semibold m-0 p-0 " id="name">
                                                 <span id="name-static"><?= $project['name']; ?></span>
                                                 <span id="name-edit" style="display: none">
                                                     <input type="text" name="name" class="form-control" placeholder="Project Name" value="<?= $project['name']; ?>">
                                                 </span>
-                                            </h5>
+                                            </p>
                                             <hr>
-                                            <h5 class="fw-normal m-0 p-0 " id="description">
+                                            <p class="fw-normal m-0 p-0 " id="description">
                                                 <span id="description-static"><?= $project['description']; ?></span>
                                                 <span id="description-edit" style="display: none;">
                                                     <textarea name="description" id="descriptionedit" class="tinymce" cols="30" rows="10"></textarea>
                                                 </span>
-                                            </h5>
-                                            <hr>
+                                            </p>
 
-                                            <span id="progress-static">
-                                                <h5 class="fw-normal m-0 p-0 mb-4" id="progress"><?= $project['progress']; ?></h5>
-                                            </span>
-                                            <span id="progress-edit" style="display: none">
-                                                <input type="text" name="progress" class="form-control" placeholder="Progress" value="<?= $project['progress']; ?>">
-                                            </span>
-
-                                            <button class="btn btn-green mt-3" id="btn-submitEdit" style="display: none">Update Project Information</button>
+                                            <button class="btn btn-green mt-3" id="btn-submitEdit" style="display: none">Simpan Perubahan</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
                     <div class="container-fluid mt-3 row mx-0 px-0">
                         <div class="col-12">
                             <div class="card mb-3 shadow">
-                                <div class="card-header bg-green-custom text-light p-3">
-                                    <p class="m-0"><i class="fa-solid fa-folder-open"></i> &nbsp; Dokumen Notulensi</p>
+                                <div class="card-header bg-green-custom text-light p-3 d-flex justify-content-between align-items-center">
+                                    <p class="m-0"><i class="fa-solid fa-calendar-day"></i> &nbsp; Daftar Acara</p>
+                                    <span>
+                                        <button class="btn btn-sm btn-light" onclick="newEvent(<?= $_GET['id']; ?>)"><i class="fa-solid fa-plus"></i>&nbsp; Tambah Acara</button>
+                                    </span>
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">
                                     <div class="">
-                                        <table class="table">
+                                        <table class="table" id="table-event">
                                             <thead>
                                                 <th>No</th>
-                                                <th>File Name</th>
-                                                <th>Uploader</th>
-                                                <th>Upload Time</th>
-                                                <th>Option</th>
+                                                <th>Nama Agenda</th>
+                                                <th>Waktu Pelaksanaan</th>
+                                                <th>Dokumen</th>
                                             </thead>
                                             <tbody>
-                                                <?php foreach ($notes as $key => $notes) {
+                                                <?php foreach ($events as $key => $event) {
                                                 ?>
                                                     <tr>
-                                                        <td><?= $key + 1; ?></td>
-                                                        <td><?= $notes['document_name']; ?></td>
-                                                        <td><?= $notes['uploader']; ?></td>
-                                                        <td><?= date_format(date_create($notes['uploaded_at']), "d/m/Y H:i A"); ?></td>
-                                                        <td>
-                                                            <a href="<?= HOST_URL ?>/admin/projects/delete?notename=<?= $notes['file_name']; ?>&id=<?= $project['id']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Delete</a>
-                                                            <a target="_blank" href="<?= HOST_URL ?>/admin/projects/download?notename=<?= $notes['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Download</a>
+                                                        <td></td>
+                                                        <td><?= $event['name']; ?></td>
+                                                        <td><?= date_format(date_create($event['commit_time']), "d-m-Y"); ?></td>
+                                                        <td class="d-flex justify-content-between align-items-center">
+                                                            <a href="<?= HOST_URL ?>/admin/projects/event?p=<?= $project['id']; ?>&e=<?= $event['id']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-folder"></i>&nbsp; Lihat Dokumen</a>
+                                                            <div class="dropdown me-4 mt-1">
+                                                                <button class="btn btn-sm" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a role="button" class="dropdown-item" onclick="editEvent(<?= $_GET['id']; ?>,<?= $event['id']; ?>,'<?= $event['name']; ?>','<?= date_format(date_create($event['commit_time']), 'd-m-Y') ?>','<?= $event['description']; ?>')"><i class="fa-solid fa-pen"></i> &nbsp;Ubah</a></li>
+                                                                    <li><a role="button" class="dropdown-item" onclick="deleteEvent(<?= $event['id']; ?>,<?= $_GET['id']; ?>)"><i class="fa-solid fa-trash-alt"></i> &nbsp;Hapus</a></li>
+                                                                </ul>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="mt-2">
-                                        <form action="<?= HOST_URL ?>/admin/projects/notes/upload" method="POST" enctype="multipart/form-data">
-                                            <input type="text" name="project_id" value="<?= $project['id']; ?>" hidden>
-                                            <input type="text" name="user_id" value="<?= $userData['id']; ?>" hidden>
-                                            <div class="input-group">
-                                                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" name="file2upload" aria-label="Upload">
-                                                <button class="btn btn-green" type="submit" id="inputGroupFileAddon04">Upload</button>
-                                            </div>
-                                        </form>
-
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -159,17 +145,17 @@
                         <div class="col-12">
                             <div class="card mb-3 shadow">
                                 <div class="card-header bg-green-custom text-light p-3">
-                                    <p class="m-0"><i class="fa-solid fa-folder-open"></i> &nbsp; Project Files</p>
+                                    <p class="m-0"><i class="fa-solid fa-folder-open"></i> &nbsp; Dokumen Kegiatan</p>
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">
                                     <div class="">
-                                        <table class="table">
+                                        <table class="table" id="table-dokumen">
                                             <thead>
                                                 <th>No</th>
-                                                <th>File Name</th>
-                                                <th>Uploader</th>
-                                                <th>Upload Time</th>
-                                                <th>Option</th>
+                                                <th>Nama Berkas</th>
+                                                <th>Pengunggah</th>
+                                                <th>Waktu Pengunggahan</th>
+                                                <th>Opsi</th>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($files as $key => $file) {
@@ -178,10 +164,10 @@
                                                         <td><?= $key + 1; ?></td>
                                                         <td><?= $file['document_name']; ?></td>
                                                         <td><?= $file['uploader']; ?></td>
-                                                        <td><?= date_format(date_create($file['uploaded_at']), "d/m/Y H:i A"); ?></td>
+                                                        <td><?= date_format(date_create($file['upload_time']), "d-m-Y H:i A"); ?></td>
                                                         <td>
-                                                            <a href="<?= HOST_URL ?>/admin/projects/delete?filename=<?= $file['file_name']; ?>&id=<?= $project['id']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Delete</a>
-                                                            <a target="_blank" href="<?= HOST_URL ?>/admin/projects/download?filename=<?= $file['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Download</a>
+                                                            <a href="<?= HOST_URL ?>/admin/projects/delete?filename=<?= $file['file_name']; ?>&id=<?= $project['id']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Hapus</a>
+                                                            <a target="_blank" href="<?= HOST_URL ?>/admin/projects/download?filename=<?= $file['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Unduh</a>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
@@ -194,7 +180,7 @@
                                             <input type="text" name="user_id" value="<?= $userData['id']; ?>" hidden>
                                             <div class="input-group">
                                                 <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" name="file2upload" aria-label="Upload">
-                                                <button class="btn btn-green" type="submit" id="inputGroupFileAddon04">Upload</button>
+                                                <button class="btn btn-green" type="submit" id="inputGroupFileAddon04">Unggah</button>
                                             </div>
                                         </form>
 
@@ -207,7 +193,7 @@
                         <div class="col-12">
                             <div class="card mb-3 shadow">
                                 <div class="card-header bg-green-custom text-light p-3">
-                                    <p class="m-0"><i class="fa-solid fa-comments"></i> &nbsp; Comments</p>
+                                    <p class="m-0"><i class="fa-solid fa-comments"></i> &nbsp; Komentar</p>
                                 </div>
                                 <div class="card-body p-2 p-sm-3">
                                     <div class="d-flex" style="max-height: 60vh; overflow-y: auto; flex-direction: column-reverse;">
@@ -237,16 +223,86 @@
                                             <input type="text" name="userid" hidden value="<?= $userData['id']; ?>">
                                             <input type="text" name="id" hidden value="<?= $project['id']; ?>">
                                             <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
-                                            <button class="btn btn-green mt-3"><i class="fa-solid fa-comment"></i>&nbsp; Send</button>
+                                            <button class="btn btn-green mt-3"><i class="fa-solid fa-comment"></i>&nbsp; Kirim Komentar</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </section>
+    </div>
+
+
+
+
+    <div class="modal fade" id="modalNewEvent" tabindex="-1" aria-labelledby="modalNewEventLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="addEvent" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalNewEventLabel">Tambah Agenda Acara</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="hidden-projid" name="project_id" hidden>
+                        <div class="mb-3">
+                            <label for="eventName" class="form-label">Nama Kegiatan</label>
+                            <input required type="text" class="form-control" id="eventName" name="eventName" placeholder="Nama Kegiatan">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDate" class="form-label">Tanggal Pelaksanaan</label>
+                            <input required type="text" class="form-control" name="eventDate" id="eventDate" readonly placeholder="Tanggal Pelaksanaan" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDescription" class="form-label">Deskripsi Kegiatan</label>
+                            <textarea required class="form-control" id="eventDescription" name="eventDescription" placeholder="Deskripsi Kegiatan"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditAcara" tabindex="-1" aria-labelledby="modalEditAcaraLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="editEvent" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalNewEventLabel">Edit Detail Agenda Acara</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="hidden-projid" name="project_id" hidden>
+                        <input type="text" class="hidden-eventid" name="event_id" hidden>
+                        <div class="mb-3">
+                            <label for="eventName" class="form-label">Nama Kegiatan</label>
+                            <input required type="text" class="form-control" id="eventName2" name="eventName" placeholder="Nama Kegiatan">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDate" class="form-label">Tanggal Pelaksanaan</label>
+                            <input required type="text" class="form-control" name="eventDate" id="eventDate2" readonly placeholder="Tanggal Pelaksanaan" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDescription" class="form-label">Deskripsi Kegiatan</label>
+                            <textarea required class="form-control" id="eventDescription2" name="eventDescription" placeholder="Deskripsi Kegiatan"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 
@@ -263,12 +319,78 @@
     <!-- Notiflix -->
     <script src="<?= ASSETS_URL ?>/js/notiflix-aio-3.2.5.min.js"></script>
 
+    <!-- Datepicker -->
+    <script src="<?= ASSETS_URL ?>/js/bootstrap-datepicker.min.js"></script>
+    <script src="<?= ASSETS_URL ?>/js/bootstrap-datepicker.id.min.js"></script>
+
     <!-- Datatables JS -->
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            var t = $('#myTable').DataTable();
+
+            $("#eventDate").datepicker({
+                format: "dd-mm-yyyy",
+                startView: "days",
+                minViewMode: "days",
+                language: 'id'
+            });
+            $("#eventDate2").datepicker({
+                format: "dd-mm-yyyy",
+                startView: "days",
+                minViewMode: "days",
+                language: 'id'
+            });
+
+
+            var t = $('#table-dokumen').DataTable({
+                "language": {
+                    "search": "Cari : ",
+                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                    "zeroRecords": "Tidak ada data yang cocok ditemukan.",
+                    "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    "infoEmpty": "Data tidak tersedia",
+                    "infoFiltered": "(Difilter dari _MAX_ total data)",
+                    "paginate": {
+                        "first": "Pertama",
+                        "last": "Terakhir",
+                        "next": '<i class="fa-solid fa-angle-right"></i>',
+                        "previous": '<i class="fa-solid fa-angle-left"></i>'
+                    },
+                },
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": 0,
+                }, ],
+                "order": [
+                    [1, 'asc']
+                ],
+            });
+
+            var r = $('#table-event').DataTable({
+                "language": {
+                    "search": "Cari : ",
+                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                    "zeroRecords": "Tidak ada data yang cocok ditemukan.",
+                    "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    "infoEmpty": "Data tidak tersedia",
+                    "infoFiltered": "(Difilter dari _MAX_ total data)",
+                    "paginate": {
+                        "first": "Pertama",
+                        "last": "Terakhir",
+                        "next": '<i class="fa-solid fa-angle-right"></i>',
+                        "previous": '<i class="fa-solid fa-angle-left"></i>'
+                    },
+                },
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": 0,
+                }, ],
+                "order": [
+                    [1, 'asc']
+                ],
+            });
+
             t.on('order.dt search.dt', function() {
                 let i = 1;
 
@@ -280,12 +402,22 @@
                 });
             }).draw();
 
-            Notiflix.Confirm.init({
-                borderRadius: '10px',
-                titleColor: '#417230',
-                okButtonBackground: '#417230',
-            })
+            r.on('order.dt search.dt', function() {
+                let i = 1;
+
+                r.cells(null, 0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).every(function(cell) {
+                    this.data(i++);
+                });
+            }).draw();
         });
+        Notiflix.Confirm.init({
+            borderRadius: '10px',
+            titleColor: '#417230',
+            okButtonBackground: '#417230',
+        })
 
         function editMode() {
             $('#name-static').hide()
@@ -317,16 +449,16 @@
         function deleteComment(commentid, by) {
 
             Notiflix.Confirm.show(
-                'Delete ' + by + '\'s Comment? ',
-                'Do you agree with me?',
-                'Yes',
-                'No',
+                'Hapus komentar ',
+                'Hapus komentar oleh' + by + '?',
+                'Ya',
+                'Batal',
                 () => {
                     $.post("comments/delete", {
                             id: commentid
                         })
                         .done(function(data) {
-                            Notiflix.Notify.success("Deleted!");
+                            Notiflix.Notify.success("Dihapus!");
 
                             setTimeout(function() {
                                 window.location.reload()
@@ -339,20 +471,65 @@
 
         function deletePrompt(id) {
             Notiflix.Confirm.show(
-                'Delete Project?',
-                'Deleting project will also delete all the file and comments attached to it',
-                'Yes',
-                'No',
+                'Hapus Kegiatan?',
+                'Menghapus kegiatan akan menghapus seluruh dokumen dan komentar terkait kegiatan ini?',
+                'Hapus',
+                'Batal',
                 () => {
                     $.post("purge", {
                             id: id
                         })
                         .done(function(data) {
-                            Notiflix.Notify.success("Deleted!");
+                            Notiflix.Notify.success("Dihapus!");
 
                             setTimeout(function() {
                                 window.location.replace('../')
                             }, 1000);
+                        });
+                },
+                () => {}, {},
+            );
+        }
+
+        function newEvent(project_id) {
+            $("#modalNewEvent").modal('show')
+            $('.hidden-projid').val(project_id)
+        }
+
+        function editEvent(project_id, event_id, name, date, desc) {
+            $("#modalEditAcara").modal('show')
+            $('.hidden-projid').val(project_id)
+            $('.hidden-eventid').val(event_id)
+            $("#eventName2").val(name)
+            $("#eventDate2").val(date)
+            $("#eventDescription2").val(desc)
+        }
+
+        function deleteEvent(event_id, project_id) {
+            Notiflix.Confirm.show(
+                'Hapus Agenda Acara ',
+                'Menghapus agenda ini akan menghapus seluruh dokumen yang diunggah didalamnya. Lanjutkan?',
+                'Ya',
+                'Batal',
+                () => {
+                    $.post("event/purge", {
+                            event_id: event_id,
+                            project_id: project_id,
+                        })
+                        .done(function(data) {
+                            if (data == 'ok') {
+                                Notiflix.Notify.success("Dihapus!");
+
+                                setTimeout(function() {
+                                    window.location.reload()
+                                }, 1000);
+                            } else {
+                                Notiflix.Notify.failure("Gagal!");
+
+                                setTimeout(function() {
+                                    window.location.reload()
+                                }, 1000);
+                            }
                         });
                 },
                 () => {}, {},

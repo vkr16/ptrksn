@@ -4,11 +4,11 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class NoteModel extends Model
+class EventModel extends Model
 {
-    protected $table      = 'notes';
+    protected $table      = 'events';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
     protected $returnType     = 'array';
-    protected $allowedFields = ['document_name', 'file_name', 'project_id', 'user_id', 'uploaded_at'];
+    protected $allowedFields = ['project_id', 'name', 'description', 'commit_time'];
 }

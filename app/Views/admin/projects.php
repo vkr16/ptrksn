@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>AdminKSNIII | Dashboard </title>
+    <title>Admin | Kegiatan </title>
     <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
@@ -22,13 +22,8 @@
     <script>
         tinymce.init({
             selector: 'textarea',
-            plugins: [
-                'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
-                'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify |' +
-                'bullist numlist checklist outdent indent | removeformat | code table help'
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+            toolbar_mode: 'floating',
         })
     </script>
 </head>
@@ -44,11 +39,11 @@
             <div class="w-100">
                 <div class="container-fluid">
                     <div class="col-md-12 d-flex justify-content-between align-items-center p-3 my-2">
-                        <p class="fs-3 fw-normal m-0">Projects Management</p>
+                        <p class="fs-3 fw-normal m-0">Manajemen Kegiatan</p>
                         <nav aria-label="breadcrumb" class="m-0">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">Admin</li>
-                                <li class="breadcrumb-item active" aria-current="page">Projects</li>
+                                <li class="breadcrumb-item active" aria-current="page">Kegiatan</li>
                             </ol>
                         </nav>
                     </div>
@@ -58,7 +53,7 @@
                         <div class="col-12">
                             <div class="card mb-3 shadow">
                                 <div class="card-header bg-green-custom text-light p-3 d-flex justify-content-between align-items-center">
-                                    <p class="m-0"><i class="fa-solid fa-diagram-project"></i> &nbsp; Project List</p>
+                                    <p class="m-0"><i class="fa-solid fa-diagram-project"></i> &nbsp; Daftar Kegiatan</p>
                                     <button class="btn btn-light btn-sm" onclick="openNewProjectPanel()"><i class="fa-solid fa-plus fa-fw"></i></button>
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">
@@ -67,9 +62,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Project Name</th>
-                                                    <th>Progress</th>
-                                                    <th>Details</th>
+                                                    <th>Nama Kegiatan</th>
+                                                    <th>Kemajuan</th>
+                                                    <th>Detail</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -78,9 +73,9 @@
                                                     <tr>
                                                         <td></td>
                                                         <td><?= $project['name']; ?></td>
-                                                        <td><?= $project['progress']; ?></td>
+                                                        <td></td>
                                                         <td>
-                                                            <a class="btn btn-sm btn-green" href="<?= HOST_URL ?>/admin/projects/detail?id=<?= $project['id']; ?>">View Details</a>
+                                                            <a class="btn btn-sm btn-green" href="<?= HOST_URL ?>/admin/projects/detail?id=<?= $project['id']; ?>">Lihat Detail</a>
                                                         </td>
                                                     </tr>
                                                 <?php }
@@ -94,20 +89,20 @@
                         <div class="col-12" id="newProjectPanel" style="display: none">
                             <div class="card mb-3 shadow">
                                 <div class="card-header bg-green-custom text-light p-3 d-flex justify-content-between align-items-center">
-                                    <p class="m-0"><i class="fa-solid fa-clipboard"></i> &nbsp;Add New Project</p>
+                                    <p class="m-0"><i class="fa-solid fa-clipboard"></i> &nbsp;Tambahkan Kegiatan Baru</p>
                                     <button class="btn btn-light btn-sm" onclick="$('#newProjectPanel').hide()"><i class="fa-solid fa-times fa-fw"></i></button>
                                 </div>
                                 <div class="card-body p-2 p-sm-3">
                                     <form action="<?= HOST_URL ?>/admin/projects/add" method="POST">
                                         <div class="mb-3">
-                                            <label for="projectName" class="form-label">Project Name</label>
+                                            <label for="projectName" class="form-label">Nama Kegiatan</label>
                                             <input type="text" class="form-control" id="projectName" name="name">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="projectDescription" class="form-label">Project Description</label>
+                                            <label for="projectDescription" class="form-label">Deskripisi Kegiatan</label>
                                             <textarea name="description" id="projectDescription" cols="30" rows="10"></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-green"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                                        <button type="submit" class="btn btn-green"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
                                     </form>
                                 </div>
                             </div>
@@ -134,7 +129,30 @@
 
     <script>
         $(document).ready(function() {
-            var t = $('#projectTable').DataTable();
+            var t = $('#projectTable').DataTable({
+                "language": {
+                    "search": "Cari : ",
+                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                    "zeroRecords": "Tidak ada data yang cocok ditemukan.",
+                    "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    "infoEmpty": "Data tidak tersedia",
+                    "infoFiltered": "(Difilter dari _MAX_ total data)",
+                    "paginate": {
+                        "first": "Pertama",
+                        "last": "Terakhir",
+                        "next": '<i class="fa-solid fa-angle-right"></i>',
+                        "previous": '<i class="fa-solid fa-angle-left"></i>'
+                    },
+                },
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": 0,
+                }, ],
+                "order": [
+                    [1, 'asc']
+                ],
+            });
+
             t.on('order.dt search.dt', function() {
                 let i = 1;
 

@@ -4,11 +4,11 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class FileModel extends Model
+class MeetingModel extends Model
 {
-    protected $table      = 'files';
+    protected $table      = 'meetings';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
     protected $returnType     = 'array';
-    protected $allowedFields = ['document_name', 'file_name', 'project_id', 'user_id', 'uploaded_at'];
+    protected $allowedFields = ['name', 'datetime', 'status'];
 }

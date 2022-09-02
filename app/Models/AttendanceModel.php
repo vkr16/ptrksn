@@ -4,11 +4,11 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProjectModel extends Model
+class AttendanceModel extends Model
 {
-    protected $table      = 'projects';
+    protected $table      = 'attendance';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
     protected $returnType     = 'array';
-    protected $allowedFields = ['name', 'description'];
+    protected $allowedFields = ['user_id', 'meeting_id', 'signature'];
 }

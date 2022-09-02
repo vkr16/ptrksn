@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>User Accounts </title>
+    <title>Admin | Akun Pengguna</title>
     <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
@@ -29,11 +29,11 @@
             <div class="w-100">
                 <div class="container-fluid">
                     <div class="col-md-12 d-flex justify-content-between align-items-center p-3 my-2">
-                        <p class="fs-3 fw-normal m-0">User Accounts Management</p>
+                        <p class="fs-3 fw-normal m-0">Manajemen Akun Pengguna</p>
                         <nav aria-label="breadcrumb" class="m-0">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">Admin</li>
-                                <li class="breadcrumb-item active" aria-current="page">User Accounts</li>
+                                <li class="breadcrumb-item active" aria-current="page">Akun Pengguna</li>
                             </ol>
                         </nav>
                     </div>
@@ -43,7 +43,7 @@
                         <div class="col-12">
                             <div class="card mb-4 shadow">
                                 <div class="card-header bg-green-custom text-light p-3 d-flex justify-content-between align-items-center">
-                                    <p class="m-0"><i class="fa-solid fa-users-gear"></i> &nbsp; User Accounts</p>
+                                    <p class="m-0"><i class="fa-solid fa-users-gear"></i> &nbsp; Akun Pengguna</p>
                                     <!-- <button class="btn btn-light btn-sm" id="userAddButton"><i class="fa-solid fa-plus"></i></button> -->
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">
@@ -58,7 +58,6 @@
                                                     <th>Instansi</th>
                                                     <th>Jabatan</th>
                                                     <th>Email</th>
-                                                    <th>Level</th>
                                                     <th>Status</th>
                                                     <th></th>
                                                 </tr>
@@ -66,7 +65,7 @@
                                             <tbody>
                                                 <?php foreach ($userAccounts as $key => $user) {
                                                 ?>
-                                                    <tr>
+                                                    <tr class="text-<?= $user['role'] == 'Admin' ? 'success' : 'dark'; ?>">
                                                         <td></td>
                                                         <td><?= $user['name']; ?></td>
                                                         <td><?= $user['nip']; ?></td>
@@ -74,22 +73,22 @@
                                                         <td><?= $user['instance']; ?></td>
                                                         <td><?= $user['position']; ?></td>
                                                         <td><?= $user['email']; ?></td>
-                                                        <td><?= $user['role']; ?></td>
+
                                                         <td><?= $user['status'] == 'Active' ? '<i class="fa-solid fa-circle-check text-success"></i>' : '<i class="fa-solid fa-circle-pause text-danger"></i>'; ?></td>
                                                         <td>
                                                             <div class="dropdown">
                                                                 <button class="btn btn-sm" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                                                 <ul class="dropdown-menu">
                                                                     <li>
-                                                                        <a class="dropdown-item" role="button" onclick="openUserEditModal(<?= $user['id']; ?>)"><i class="fa-solid fa-user-pen fa-fw"></i>&nbsp; Edit
+                                                                        <a class="dropdown-item" role="button" onclick="openUserEditModal(<?= $user['id']; ?>)"><i class="fa-solid fa-user-pen fa-fw"></i>&nbsp; Ubah
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" role="button" onclick="openUserPasswordResetModal(<?= $user['id']; ?>)"><i class="fa-solid fa-lock-open fa-fw"></i>&nbsp; Reset Password
+                                                                        <a class="dropdown-item" role="button" onclick="openUserPasswordResetModal(<?= $user['id']; ?>)"><i class="fa-solid fa-lock-open fa-fw"></i>&nbsp; Atur Ulang Kata Sandi
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a class="dropdown-item" role="button" onclick="userDeletePrompt(<?= $user['id']; ?>,'<?= $user['name']; ?>')"><i class="fa-solid fa-trash-alt fa-fw"></i>&nbsp; Delete
+                                                                        <a class="dropdown-item" role="button" onclick="userDeletePrompt(<?= $user['id']; ?>,'<?= $user['name']; ?>')"><i class="fa-solid fa-trash-alt fa-fw"></i>&nbsp; Hapus Akun
                                                                         </a>
                                                                     </li>
                                                                 </ul>
@@ -106,14 +105,14 @@
                         <div class="col-md-6">
                             <div class="card mb-4 shadow">
                                 <div class="card-header bg-green-custom text-light p-3 d-flex justify-content-between align-items-center">
-                                    <p class="m-0"><i class="fa-solid fa-user-plus"></i> &nbsp; Add New User Accounts</p>
+                                    <p class="m-0"><i class="fa-solid fa-user-plus"></i> &nbsp; Tambah Akun Pengguna Baru</p>
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">
                                     <div class="">
                                         <form action="<?= HOST_URL ?>/admin/users/add" method="POST">
                                             <div class="mb-3">
-                                                <label for="InputName1" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" id="InputName1" name="name" placeholder="Full Name">
+                                                <label for="InputName1" class="form-label">Nama Lengkap</label>
+                                                <input type="text" class="form-control" id="InputName1" name="name" placeholder="Nama Lengkap">
                                             </div>
                                             <div class="d-flex">
                                                 <div class="col-md-6 pe-2">
@@ -130,7 +129,7 @@
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="SelectRole1" class="form-label">Instance</label>
+                                                <label for="SelectRole1" class="form-label">Instansi</label>
                                                 <select class="form-select" name="instanceselect" id="instance" onchange="isNewInstance()">
                                                     <option class="text-mute">- Instansi Asal -</option>
                                                     <?php
@@ -164,15 +163,15 @@
                                                 <input type="text" class="form-control mt-2" style="display: none" id="InputPosition1" name="position" placeholder="Jabatan">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="InputEmail1" class="form-label">Email Address</label>
-                                                <input type="email" class="form-control" id="InputEmail1" name="email" placeholder="Email Address">
+                                                <label for="InputEmail1" class="form-label">Alamat Email</label>
+                                                <input type="email" class="form-control" id="InputEmail1" name="email" placeholder="Alamat Email">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="exampleInputPassword1" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password">
+                                                <label for="exampleInputPassword1" class="form-label">Kata Sandi</label>
+                                                <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Kata Sandi">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="SelectRole1" class="form-label">User Role</label>
+                                                <label for="SelectRole1" class="form-label">Jenis Akun</label>
                                                 <select class="form-select" name="role">
                                                     <option value="User">User (Default)</option>
                                                     <option value="Admin">Admin</option>
@@ -195,15 +194,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="userEditModalLabel">Edit User Information</h5>
+                    <h5 class="modal-title" id="userEditModalLabel">Ubah Informasi Pengguna</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="<?= HOST_URL ?>/admin/users/update" method="POST">
                         <input type="text" hidden id="updateid" name="id">
                         <div class="mb-3">
-                            <label for="InputName2" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" name="name" id="InputName2" placeholder="Full Name">
+                            <label for="InputName2" class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" name="name" id="InputName2" placeholder="Nama Lengkap">
                         </div>
                         <div class="d-flex">
                             <div class="col-md-6 pe-2">
@@ -220,7 +219,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="SelectRole1" class="form-label">Instance</label>
+                            <label for="SelectRole1" class="form-label">Instansi</label>
                             <select class="form-select" name="instanceselect" id="instance2" onchange="isNewInstance()">
                                 <option class="text-mute">- Instansi Asal -</option>
                                 <?php
@@ -254,28 +253,28 @@
                             <input type="text" class="form-control mt-2" style="display: none" id="InputPosition2" name="position" placeholder="Jabatan">
                         </div>
                         <div class="mb-3">
-                            <label for="InputEmail2" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" name="email" id="InputEmail2" placeholder="Email Address">
+                            <label for="InputEmail2" class="form-label">Alamat Email</label>
+                            <input type="email" class="form-control" name="email" id="InputEmail2" placeholder="Alamat Email">
                         </div>
                         <div class="mb-3">
-                            <label for="SelectRole2" class="form-label">User Role</label>
+                            <label for="SelectRole2" class="form-label">Jenis Akun</label>
                             <select class="form-select" name="role" id="SelectRole2">
                                 <option value="User">User (Default)</option>
                                 <option value="Admin">Admin</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="SelectStatus2" class="form-label">User Status</label>
+                            <label for="SelectStatus2" class="form-label">Status Akun</label>
                             <select class="form-select" name="status" id="SelectStatus2">
-                                <option value="Active">Active (Default)</option>
-                                <option value="Suspended">Suspended</option>
+                                <option value="Active">Aktif (Default)</option>
+                                <option value="Suspended">Tangguhkan</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan</button>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -286,17 +285,17 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="userPasswordResetModalLabel">Reset User Password </h5>
+                    <h5 class="modal-title" id="userPasswordResetModalLabel">Atur Ulang Kata Sandi Pengguna</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="<?= HOST_URL ?>/admin/users/resetPassword" method="POST">
                         <input type="text" hidden id="resetid" name="id">
                         <div class="mb-3">
-                            <label for="InputPassword3" class="form-label">New Password</label>
-                            <input type="password" class="form-control" name="password" id="InputPassword3" placeholder="New Password">
+                            <label for="InputPassword3" class="form-label">Kata Sandi Baru</label>
+                            <input type="password" class="form-control" name="password" id="InputPassword3" placeholder="Kata Sandi Baru">
                         </div>
-                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -335,7 +334,30 @@
         })
 
         $(document).ready(function() {
-            var t = $('#myTable').DataTable();
+            var t = $('#myTable').DataTable({
+                "language": {
+                    "search": "Cari : ",
+                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                    "zeroRecords": "Tidak ada data yang cocok ditemukan.",
+                    "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    "infoEmpty": "Data tidak tersedia",
+                    "infoFiltered": "(Difilter dari _MAX_ total data)",
+                    "paginate": {
+                        "first": "Pertama",
+                        "last": "Terakhir",
+                        "next": '<i class="fa-solid fa-angle-right"></i>',
+                        "previous": '<i class="fa-solid fa-angle-left"></i>'
+                    },
+                },
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": 0,
+                }, ],
+                "order": [
+                    [1, 'asc']
+                ],
+            });
+
             t.on('order.dt search.dt', function() {
                 let i = 1;
 
@@ -348,8 +370,8 @@
             }).draw();
         });
 
-        $('#sidebar-item-projects').removeClass('sidebar-active').addClass('sidebar-item');
         $('#sidebar-item-users').removeClass('sidebar-item').addClass('sidebar-active');
+        $('#sidebar-item-projects').removeClass('sidebar-active').addClass('sidebar-item');
 
         function openUserEditModal(id) {
             $('#userEditModal').modal('show');
@@ -379,10 +401,10 @@
 
         function userDeletePrompt(id, name) {
             Notiflix.Confirm.show(
-                'Delete ' + name + '\'s Account? ',
-                'Are you sure want to delete this user?',
-                'Yes',
-                'No',
+                'Hapus Akun',
+                'Anda yakin ingin menghapus akun ' + name + '? ',
+                'Ya',
+                'Batal',
                 () => {
                     $.post("users/delete", {
                             id: id
@@ -415,6 +437,12 @@
         }
 
         function isNewPosition() {
+            if ($("#position").val() == 'newposition12345') {
+                $("#InputPosition1").show();
+            } else {
+                $("#InputPosition1").hide();
+                $("#InputPosition1").val('')
+            }
             if ($("#position2").val() == 'newposition12345') {
                 $("#InputPosition2").show();
             } else {

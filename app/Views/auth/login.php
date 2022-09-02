@@ -28,22 +28,22 @@
                 <span class="fw-bold h1">SUBDIT </span><span class="fw-light h1">PTRKSN III</span>
             </div>
             <div class="card-body">
-                <p class="text-center">Sign in to start your session</p>
+                <p class="text-center">Masuk untuk memulai sesi anda</p>
                 <form action="login" method="POST">
                     <div class="input-group mb-3">
-                        <input required type="text" class="form-control" name="email" placeholder="Email" />
+                        <input required type="text" class="form-control" name="email" placeholder="Alamat Email" />
                         <span class="input-group-text bg-indigo-light">
                             <i class="fas fa-envelope"></i>
                         </span>
                     </div>
                     <div class="input-group mb-3">
-                        <input required type="password" class="form-control" name="password" placeholder="Password" />
+                        <input required type="password" class="form-control" name="password" placeholder="Kata Sandi" />
                         <span class="input-group-text bg-indigo-light">
                             <i class="fa-solid fa-lock"></i>
                         </span>
                     </div>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-green" type="submit">Sign In</button>
+                        <button class="btn btn-green" type="submit">Masuk</button>
                     </div>
                 </form>
                 <!-- <div class="d-grid gap-1 mt-3">

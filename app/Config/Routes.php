@@ -35,7 +35,7 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Pages::index');
+$routes->get('/', 'Auth::index');
 $routes->get('/admin', 'Admin::index');
 $routes->get('/user', 'User::index');
 
@@ -51,6 +51,29 @@ $routes->get('/admin/projects/download', 'Admin::projectsDownload');
 $routes->get('/admin/projects/delete', 'Admin::projectsDelete');
 $routes->post('/admin/projects/comments/delete', 'Admin::commentsDelete');
 $routes->post('/admin/projects/purge', 'Admin::projectPurge');
+$routes->post('/admin/projects/addEvent', 'Admin::addEvent');
+$routes->post('/admin/projects/editEvent', 'Admin::editEvent');
+$routes->get('/admin/projects/event', 'Admin::projectsEvent');
+$routes->post('/admin/projects/event/purge', 'Admin::eventPurge');
+$routes->post('/admin/projects/eventdocs/upload', 'Admin::eventsUpload');
+$routes->get('/admin/projects/events/delete', 'Admin::eventsDelete');
+$routes->get('/admin/projects/events/download', 'Admin::eventsDownload');
+$routes->get('/admin/projects/documents', 'Admin::projectDocuments');
+
+
+
+$routes->get('/admin/meetings', 'Admin::meetings');
+$routes->post('/admin/meetings/addMeeting', 'Admin::meetingsAdd');
+$routes->post('/admin/meetings/delete', 'Admin::meetingsDelete');
+$routes->get('/admin/meetings/attendance', 'Admin::meetingsAttendance');
+$routes->get('/admin/meetings/attendance/openaccess', 'Admin::meetingsAttopen');
+$routes->get('/admin/meetings/attendance/closeaccess', 'Admin::meetingsAttclose');
+
+$routes->get('/user/meetings', 'User::meetings');
+$routes->get('/user/meetings/attendance', 'User::meetingsAttendance');
+$routes->post('/user/meetings/attendance/sign', 'User::meetingsSign');
+$routes->post('/user/meetings/attendance/void', 'User::meetingsVoid');
+
 
 
 
@@ -69,6 +92,7 @@ $routes->get('/user/projects/detail', 'User::projectsDetail');
 $routes->post('/user/projects/addComment', 'User::projectsAddComment');
 $routes->post('/user/projects/upload', 'User::projectsUpload');
 $routes->get('/user/projects/download', 'User::projectsDownload');
+$routes->get('/user/projects/event', 'User::projectsEvent');
 
 
 
