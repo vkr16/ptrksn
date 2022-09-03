@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Admin | Dokumen Kegiatan </title>
+    <title>Admin | Daftar Pertemuan </title>
     <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
@@ -96,6 +96,13 @@
                                                             <div class="dropdown me-4 mt-1">
                                                                 <button class="btn btn-sm" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                                                 <ul class="dropdown-menu">
+                                                                    <li><a role="button" class="dropdown-item" onclick="updateMeeting(
+                                                                        <?= $meeting['id']; ?>,
+                                                                        '<?= $meeting['name']; ?>',
+                                                                        '<?= date_format(date_create($meeting['datetime']), 'd-m-Y'); ?>',
+                                                                        '<?= date_format(date_create($meeting['datetime']), 'H'); ?>',
+                                                                        '<?= date_format(date_create($meeting['datetime']), 'i'); ?>'
+                                                                        )"><i class="fa-solid fa-pencil"></i> &nbsp;Ubah</a></li>
                                                                     <li><a role="button" class="dropdown-item" onclick="deleteMeeting(<?= $meeting['id']; ?>)"><i class="fa-solid fa-trash-alt"></i> &nbsp;Hapus</a></li>
                                                                 </ul>
                                                             </div>
@@ -166,6 +173,58 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalEditAgenda" tabindex="-1" aria-labelledby="modalEditAgendaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="meetings/editMeeting" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditAgendaLabel">Buat Agenda Baru</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" name="mid" id="mid-hidden" hidden>
+                        <div class="mb-3">
+                            <label for="agendaName" class="form-label">Nama Agenda</label>
+                            <input required type="text" class="form-control" id="agendaName2" name="agendaName" placeholder="Nama Agenda">
+                        </div>
+                        <div class="mb-3">
+                            <label for="agendaDate" class="form-label">Waktu Pelaksanaan</label>
+                            <div class="mb-3 row mx-0 px-0">
+                                <div class="col-sm-5 mx-0 px-0">
+                                    <input required type="text" class="form-control" id="agendaDate2" name="agendaDate" value="<?= date_format(date_create('now'), "d-m-Y"); ?>" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select required name="hour" class="form-select col-6" id="hr2">
+                                        <?php for ($i = 0; $i < 24; $i++) {
+                                        ?>
+                                            <option value="<?= $i < 10 ? '0' . $i : $i; ?>"><?= $i < 10 ? '0' . $i : $i; ?></option>
+                                        <?php
+                                        } ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-1 d-flex justify-content-center align-items-center">
+                                    <h3>:</h3>
+                                </div>
+                                <div class="col-sm-3 me-0 pe-0">
+                                    <select required name="minute" class="form-select col-6" id="min2">
+                                        <?php for ($i = 0; $i < 60; $i++) {
+                                        ?>
+                                            <option value="<?= $i < 10 ? '0' . $i : $i; ?>"><?= $i < 10 ? '0' . $i : $i; ?></option>
+                                        <?php
+                                        } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -194,6 +253,12 @@
         $(document).ready(function() {
 
             $("#agendaDate").datepicker({
+                format: "dd-mm-yyyy",
+                startView: "days",
+                minViewMode: "days",
+                language: 'id'
+            });
+            $("#agendaDate2").datepicker({
                 format: "dd-mm-yyyy",
                 startView: "days",
                 minViewMode: "days",
@@ -274,6 +339,15 @@
                 },
                 () => {}, {},
             );
+        }
+
+        function updateMeeting(mid, name, date, hr, min) {
+            $("#modalEditAgenda").modal('show');
+            $("#agendaName2").val(name)
+            $("#agendaDate2").val(date)
+            $("#hr2").val(hr)
+            $("#min2").val(min)
+            $("#mid-hidden").val(mid)
         }
     </script>
 </body>

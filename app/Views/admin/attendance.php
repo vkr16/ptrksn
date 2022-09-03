@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Admin | Dokumen Kegiatan </title>
+    <title>Admin | Daftar Kehadiran </title>
     <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
@@ -75,7 +75,8 @@
                                         <?php } else { ?>
                                             <button class="btn btn-sm btn-outline-light" onclick="closeAccess(<?= $_GET['m']; ?>)"><i class="fa-solid fa-lock"></i> &nbsp;Tutup Akses Presensi</button>
                                         <?php } ?>
-                                        <button class="btn btn-sm btn-light" onclick="exportData()"><i class="fa-solid fa-print"></i> &nbsp;Cetak Data</button>
+                                        <a href="attendance/topdf?m=<?= $_GET['m']; ?>" class="btn btn-sm btn-light" target="_blank"><i class="fa-solid fa-print"></i> &nbsp;Cetak Data</a>
+                                        <a href="attendance/toxlsx?m=<?= $_GET['m']; ?>" class="btn btn-sm btn-light" target="_blank"><i class="fa-solid fa-file-excel"></i> &nbsp;Export Data</a>
                                     </span>
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">

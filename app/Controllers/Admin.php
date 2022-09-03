@@ -959,6 +959,40 @@ class Admin extends BaseController
         }
     }
 
+    public function meetingsEdit()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        $name = $_POST['agendaName'];
+        $date = $_POST['agendaDate'];
+        $hour = $_POST['hour'];
+        $minute = $_POST['minute'];
+        $mid = $_POST['mid'];
+
+        $tgl = substr($date, 0, 2);
+        $bln = substr($date, 3, 2);
+        $thn = substr($date, 6, 4);
+
+        $datetime = $thn . '-' . $bln . '-' . $tgl . ' ' . $hour . ':' . $minute;
+
+        $data = [
+            'name' => $name,
+            'datetime' => $datetime,
+        ];
+
+        if ($this->meetingModel->where('id', $mid)->set($data)->update()) {
+            return redirect()->to(HOST_URL . '/admin/meetings');
+        }
+    }
+
     public function meetingsAttendance()
     {
         // Session Check
@@ -1100,5 +1134,99 @@ class Admin extends BaseController
         } else {
             return 'failed';
         }
+    }
+
+    public function meetingsAttendance2pdf()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        $meeting_id = $_GET['m'];
+        $attendance = $this->attendanceModel->where("meeting_id", $meeting_id)->find();
+
+        $attendanceData = [];
+        foreach ($attendance as $key => $participant) {
+            $user_id = $participant['user_id'];
+
+            $user = $this->userModel->where('id', $user_id)->find();
+            $participantData = [
+                $key => [
+                    'id' => $user_id,
+                    'name' => $user[0]['name'],
+                    'nip' => $user[0]['nip'],
+                    'nik' => $user[0]['nik'],
+                    'position' => $user[0]['position'],
+                    'instance' => $user[0]['instance'],
+                    'email' => $user[0]['email'],
+                    'signature' => $participant['signature'],
+                    'meeting_id' => $participant['meeting_id'],
+                ],
+            ];
+            $attendanceData = array_merge($attendanceData, $participantData);
+        }
+        $meetingData = $this->meetingModel->where('id', $meeting_id)->findAll();
+
+        $data = [
+            'attendances' => $attendanceData,
+            'meeting' => $meetingData
+        ];
+        return view('admin/attendance2pdf', $data);
+    }
+
+    public function meetingsAttendance2xlsx()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        $meeting_id = $_GET['m'];
+        $attendance = $this->attendanceModel->where("meeting_id", $meeting_id)->find();
+        $meetingData = $this->meetingModel->where('id', $meeting_id)->findAll();
+
+        $participantsList = [
+            ['', 'Kegiatan', $meetingData[0]['name']],
+            ['', 'Waktu Pelaksanaan', date_format(date_create($meetingData[0]['datetime']), "d-m-Y H:i A")],
+            [],
+            ['No', 'Nama Partisipan', 'NIP', 'NIK', 'Jabatan', 'Instansi']
+        ];
+        $no = 1;
+        foreach ($attendance as $key => $participant) {
+            $user_id = $participant['user_id'];
+
+            $user = $this->userModel->where('id', $user_id)->find();
+            $participantsList = array_merge(
+                $participantsList,
+                [
+                    [
+                        $no,
+                        $user[0]['name'],
+                        $user[0]['nip'],
+                        $user[0]['nik'],
+                        $user[0]['position'],
+                        $user[0]['instance'],
+                        // $participant['signature']
+                    ]
+                ]
+            );
+            $no++;
+        }
+
+
+        $xlsx = SimpleXLSXGen::fromArray($participantsList);
+        $xlsx->downloadAs('Daftar Presensi ' . $meetingData[0]['name'] . '-' . $meetingData[0]['datetime'] . '.xlsx');
+        exit;
     }
 }

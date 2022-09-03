@@ -64,8 +64,11 @@ $routes->get('/admin/projects/documents', 'Admin::projectDocuments');
 
 $routes->get('/admin/meetings', 'Admin::meetings');
 $routes->post('/admin/meetings/addMeeting', 'Admin::meetingsAdd');
+$routes->post('/admin/meetings/editMeeting', 'Admin::meetingsEdit');
 $routes->post('/admin/meetings/delete', 'Admin::meetingsDelete');
 $routes->get('/admin/meetings/attendance', 'Admin::meetingsAttendance');
+$routes->get('/admin/meetings/attendance/topdf', 'Admin::meetingsAttendance2pdf');
+$routes->get('/admin/meetings/attendance/toxlsx', 'Admin::meetingsAttendance2xlsx');
 $routes->get('/admin/meetings/attendance/openaccess', 'Admin::meetingsAttopen');
 $routes->get('/admin/meetings/attendance/closeaccess', 'Admin::meetingsAttclose');
 
