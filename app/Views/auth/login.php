@@ -84,3 +84,9 @@ if (isset($_COOKIE['login']) && $_COOKIE['login'] == 'incorrect') {
     </script>';
 }
 ?>
+
+<script>
+    function developerCredit() {
+        Notiflix.Notify.info("Developer: FM. (www.akuonline.my.id)")
+    }
+</script>

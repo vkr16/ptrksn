@@ -17,6 +17,11 @@
                         <div class=" m-0"> <i class="fa-solid fa-clipboard-check fa-fw"></i> &nbsp; Data Kehadiran</div>
                     </a>
                 </li>
+                <li>
+                    <a href="<?= HOST_URL ?>/user/guide" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light sidebar-item " id="sidebar-item-guide">
+                        <div class=" m-0"> <i class="fa-solid fa-circle-question fa-fw"></i> &nbsp; Panduan Pengguna</div>
+                    </a>
+                </li>
                 <!-- <li>
                     <a href="#management-collapse" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light sidebar-item btn-toggle collapsed justify-content-between" data-bs-toggle="collapse" aria-expanded="false">
                         <div class=" m-0"> <i class="fa-solid fa-list-check"></i> &nbsp; Management</div>

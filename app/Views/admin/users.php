@@ -58,6 +58,7 @@
                                                     <th>Instansi</th>
                                                     <th>Jabatan</th>
                                                     <th>Email</th>
+                                                    <th>No. Telepon</th>
                                                     <th>Status</th>
                                                     <th></th>
                                                 </tr>
@@ -73,6 +74,7 @@
                                                         <td><?= $user['instance']; ?></td>
                                                         <td><?= $user['position']; ?></td>
                                                         <td><?= $user['email']; ?></td>
+                                                        <td><?= $user['phone']; ?></td>
 
                                                         <td><?= $user['status'] == 'Active' ? '<i class="fa-solid fa-circle-check text-success"></i>' : '<i class="fa-solid fa-circle-pause text-danger"></i>'; ?></td>
                                                         <td>
@@ -161,6 +163,10 @@
                                                     <option class="text-mute" value="newposition12345">Lainnya</option>
                                                 </select>
                                                 <input type="text" class="form-control mt-2" style="display: none" id="InputPosition1" name="position" placeholder="Jabatan">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="InputPhone1" class="form-label">No. Telepon</label>
+                                                <input type="number" class="form-control" id="InputPhone1" name="phone" placeholder="No. Telepon">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="InputEmail1" class="form-label">Alamat Email</label>
@@ -253,6 +259,10 @@
                             <input type="text" class="form-control mt-2" style="display: none" id="InputPosition2" name="position" placeholder="Jabatan">
                         </div>
                         <div class="mb-3">
+                            <label for="InputPhone2" class="form-label">No. Telepon</label>
+                            <input type="number" class="form-control" name="phone" id="InputPhone2" placeholder="No. Telepon">
+                        </div>
+                        <div class="mb-3">
                             <label for="InputEmail2" class="form-label">Alamat Email</label>
                             <input type="email" class="form-control" name="email" id="InputEmail2" placeholder="Alamat Email">
                         </div>
@@ -269,6 +279,7 @@
                                 <option value="Active">Aktif (Default)</option>
                                 <option value="Suspended">Tangguhkan</option>
                             </select>
+                            <input type="text" name="hiddenstatus" id="hiddenstatus" hidden readonly>
                         </div>
                         <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan</button>
                     </form>
@@ -384,13 +395,20 @@
                     $('#updateid').val(userData[0].id)
                     $('#InputName2').val(userData[0].name)
                     $('#InputEmail2').val(userData[0].email)
+                    $('#InputPhone2').val(userData[0].phone)
                     $('#InputNIP2').val(userData[0].nip)
                     $('#InputNIK2').val(userData[0].nik)
                     $('#instance2').val(userData[0].instance).change()
                     $('#position2').val(userData[0].position).change()
                     $('#SelectRole2').val(userData[0].role).change()
                     $('#SelectStatus2').val(userData[0].status).change()
+                    $('#hiddenstatus').val(userData[0].status)
+                    if (<?= $userData['id']; ?> == userData[0].id) {
+                        $("#SelectStatus2").prop("disabled", "disabled")
+                    } else {
+                        $("#SelectStatus2").prop("disabled", false)
 
+                    }
                 });
         }
 

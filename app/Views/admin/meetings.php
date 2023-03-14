@@ -308,9 +308,16 @@
         function newAgenda() {
             $('#modalNewAgenda').modal('show')
             var now = new Date()
-
-            $('#hr').val(now.getHours()).change();
-            $('#min').val(now.getMinutes()).change();
+            var hr = now.getHours()
+            var min = now.getMinutes()
+            if (hr < 10) {
+                hr = "0" + hr;
+            }
+            if (min < 10) {
+                min = "0" + min;
+            }
+            $('#hr').val(hr).change();
+            $('#min').val(min).change();
         }
 
         function deleteMeeting(mid) {

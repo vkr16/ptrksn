@@ -44,7 +44,7 @@
 
 <body>
     <div class="d-flex">
-        <?= $this->include('layout_components/sidebar'); ?>
+        <?= $this->include('layout_components/sidebar-user'); ?>
         <section class="vh-100 w-100 scrollable-y">
             <?= $this->include('layout_components/topbar'); ?>
             <div class="w-100">
@@ -117,7 +117,7 @@
                                             <input type="text" name="project_id" value="<?= $_GET['p']; ?>" hidden>
                                             <input type="text" name="user_id" value="<?= $userData['id']; ?>" hidden>
                                             <div class="input-group">
-                                                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" name="file2upload" aria-label="Upload">
+                                                <input required type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" name="file2upload" aria-label="Upload">
                                                 <button class="btn btn-green" type="submit" id="inputGroupFileAddon04">Unggah</button>
                                             </div>
                                         </form>

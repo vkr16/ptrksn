@@ -13,6 +13,7 @@ class Admin extends BaseController
     protected $eventfileModel;
     protected $meetingModel;
     protected $attendanceModel;
+    protected $tutorModel;
 
 
     function __construct()
@@ -26,6 +27,7 @@ class Admin extends BaseController
         $this->eventfileModel = model('EventFileModel', true, $db);
         $this->meetingModel = model('MeetingModel', true, $db);
         $this->attendanceModel = model('AttendanceModel', true, $db);
+        $this->tutorModel = model('TutorModel', true, $db);
     }
 
     public function index()
@@ -110,6 +112,7 @@ class Admin extends BaseController
 
         $name = $_POST['name'];
         $email = $_POST['email'];
+        $phone = $_POST['phone'];
         $password = $_POST['password'];
         $role = $_POST['role'];
         $instance1 = $_POST['instanceselect'];
@@ -135,6 +138,7 @@ class Admin extends BaseController
 
         $data = [
             'name' => $name,
+            'phone' => $phone,
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),
             'role' => $role,
@@ -197,9 +201,14 @@ class Admin extends BaseController
 
         $id = $_POST['id'];
         $name = $_POST['name'];
-        $email = $_POST['email'];
         $role = $_POST['role'];
-        $status = $_POST['status'];
+        $phone = $_POST['phone'];
+        $email = $_POST['email'];
+        if (isset($_POST['status'])) {
+            $status = $_POST['status'];
+        } else {
+            $status = $_POST['hiddenstatus'];
+        }
 
         $instance1 = $_POST['instanceselect'];
         $instance2 = $_POST['instance'];
@@ -224,8 +233,9 @@ class Admin extends BaseController
         $data = [
             'id' => $id,
             'name' => $name,
-            'email' => $email,
             'role' => $role,
+            'email' => $email,
+            'phone' => $phone,
             'status' => $status,
             'nip' => $nip,
             'nik' => $nik,
@@ -309,9 +319,9 @@ class Admin extends BaseController
         $id = $_GET['id'];
 
         $projectFiles = $this->projectfileModel->where("project_id = $id")->findAll();
-        if ($projectFiles == null) {
-            return redirect()->to(HOST_URL);
-        }
+        // if ($projectFiles == null) {
+        //     return redirect()->to(HOST_URL);
+        // }
 
         $arrayfiles = [];
         foreach ($projectFiles as $key => $file) {
@@ -363,6 +373,122 @@ class Admin extends BaseController
             'events' => $events
         ];
         return view('admin/project-detail', $data);
+    }
+
+    public function projectsDetail2pdf()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+
+        $id = $_GET['id'];
+
+        $projectFiles = $this->projectfileModel->where("project_id = $id")->findAll();
+        // if ($projectFiles == null) {
+        //     return redirect()->to(HOST_URL);
+        // }
+
+        $arrayfiles = [];
+        foreach ($projectFiles as $key => $file) {
+            $user_id = $file['user_id'];
+            $userUploaded = $this->userModel->where("id = $user_id")->find();
+            $filesData = [
+                $key => [
+                    'id' => $file['id'],
+                    'uploader' => $userUploaded[0]['name'],
+                    'instance' => $userUploaded[0]['instance'],
+                    'user_id' => $file['user_id'],
+                    'project_id' => $file['project_id'],
+                    'document_name' => $file['document_name'],
+                    'file_name' => $file['file_name'],
+                    'upload_time' => $file['upload_time']
+                ],
+            ];
+            $arrayfiles = array_merge($arrayfiles, $filesData);
+        }
+
+        $userComment = $this->commentModel->where('project_id', $id)->orderBy('id', 'desc')->findAll();
+
+        $arrayComments = [];
+        foreach ($userComment as $key => $comment) {
+            $user_id = $comment['user_id'];
+            $userCommenting = $this->userModel->where('id', $user_id)->find();
+            $commentsData = [
+                $key => [
+                    'id' => $comment['id'],
+                    'user' => $userCommenting[0]['name'],
+                    'user_id' => $comment['user_id'],
+                    'project_id' => $comment['project_id'],
+                    'comment' => $comment['comment'],
+                    'commented_at' => $comment['commented_at'],
+                ],
+            ];
+            $arrayComments = array_merge($arrayComments, $commentsData);
+        }
+        $project = $this->projectModel->find($id);
+
+
+        $events = $this->eventModel->where("project_id = $id")->find();
+
+        // var_dump($events);
+        $doc1 = [];
+        foreach ($events as $key => $event) {
+            $event_id = $event['id'];
+
+            $docs = $this->eventfileModel->where("event_id = $event_id")->find();
+            // var_dump($docs);
+            // echo "<br><br>";
+            $doc2 = [];
+            foreach ($docs as $idx => $doc) {
+                $document_name = $doc['document_name'];
+                // var_dump($document_name);
+                // echo "<hr>";
+                $user_id = $doc['user_id'];
+                $uploader = $this->userModel->where("id = $user_id")->find();
+                // var_dump($uploader);
+                // echo "<hr>";
+                $docData = [
+                    $idx => [
+                        'id' => $doc['id'],
+                        'uploader' => $uploader[0]['name'],
+                        'instance' => $uploader[0]['instance'],
+                        'user_id' => $doc['user_id'],
+                        'event_id' => $doc['event_id'],
+                        'document_name' => $doc['document_name'],
+                        'file_name' => $doc['file_name'],
+                        'upload_time' => $doc['upload_time']
+                    ],
+                ];
+                $doc2 = array_merge($doc2, $docData);
+            }
+
+            $eventfilearray = [
+                $key => $doc2
+            ];
+            $doc1 = array_merge($doc1, $eventfilearray);
+        }
+
+
+        $lastevent = $this->eventModel->where("project_id = $id")->orderBy('id', 'desc')->find();
+
+        $data = [
+            'project' => $project,
+            'userData' => $userData,
+            'commentData' => $arrayComments,
+            'files' => $arrayfiles,
+            'events' => $events,
+            'lastevent' => $lastevent,
+            'eventfiles' => $doc1
+        ];
+        return view('admin/project-detail2pdf', $data);
     }
 
     public function projectsAddComment()
@@ -1165,6 +1291,7 @@ class Admin extends BaseController
                     'position' => $user[0]['position'],
                     'instance' => $user[0]['instance'],
                     'email' => $user[0]['email'],
+                    'phone' => $user[0]['phone'],
                     'signature' => $participant['signature'],
                     'meeting_id' => $participant['meeting_id'],
                 ],
@@ -1200,7 +1327,7 @@ class Admin extends BaseController
             ['', 'Kegiatan', $meetingData[0]['name']],
             ['', 'Waktu Pelaksanaan', date_format(date_create($meetingData[0]['datetime']), "d-m-Y H:i A")],
             [],
-            ['No', 'Nama Partisipan', 'NIP', 'NIK', 'Jabatan', 'Instansi']
+            ['No', 'Nama Partisipan', 'NIP', 'NIK', 'Jabatan', 'Instansi', 'Email', 'No Telepon']
         ];
         $no = 1;
         foreach ($attendance as $key => $participant) {
@@ -1217,7 +1344,8 @@ class Admin extends BaseController
                         $user[0]['nik'],
                         $user[0]['position'],
                         $user[0]['instance'],
-                        // $participant['signature']
+                        $user[0]['email'],
+                        $user[0]['phone'],
                     ]
                 ]
             );
@@ -1225,8 +1353,68 @@ class Admin extends BaseController
         }
 
 
-        $xlsx = SimpleXLSXGen::fromArray($participantsList);
-        $xlsx->downloadAs('Daftar Presensi ' . $meetingData[0]['name'] . '-' . $meetingData[0]['datetime'] . '.xlsx');
-        exit;
+        var_dump($participantsList);
+        // $xlsx = SimpleXLSXGen::fromArray($participantsList);
+        // $xlsx->downloadAs('Daftar Presensi ' . $meetingData[0]['name'] . '-' . $meetingData[0]['datetime'] . '.xlsx');
+        // exit;
+    }
+
+    public function guide()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        // On Session User Data
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+        $userGuide  = $this->tutorModel->find(1);
+
+        $data = [
+            'userData' => $userData,
+            'userGuide' => $userGuide['content']
+        ];
+
+
+        return view('admin/guide', $data);
+    }
+
+    public function guideUpdate()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'User') {
+                return redirect()->to(HOST_URL . '/user');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        // On Session User Data
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+
+        $content = $_POST['content'];
+
+        $datanew = [
+            'content' => $content
+        ];
+
+        $this->tutorModel->set($datanew)->update();
+
+        $userGuide  = $this->tutorModel->find(1);
+
+        $data = [
+            'userData' => $userData,
+            'userGuide' => $userGuide['content']
+        ];
+
+
+        return redirect()->to(HOST_URL . '/admin/guide');
     }
 }

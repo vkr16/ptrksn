@@ -42,6 +42,7 @@ $routes->get('/user', 'User::index');
 
 $routes->get('/admin/projects', 'Admin::index');
 $routes->get('/admin/projects/detail', 'Admin::projectsDetail');
+$routes->get('/admin/projects/detail/topdf', 'Admin::projectsDetail2pdf');
 $routes->post('/admin/projects/add', 'Admin::projectsAdd');
 $routes->post('/admin/projects/addComment', 'Admin::projectsAddComment');
 $routes->post('/admin/projects/update', 'Admin::projectsUpdate');
@@ -60,6 +61,9 @@ $routes->get('/admin/projects/events/delete', 'Admin::eventsDelete');
 $routes->get('/admin/projects/events/download', 'Admin::eventsDownload');
 $routes->get('/admin/projects/documents', 'Admin::projectDocuments');
 
+$routes->get('/user/guide', 'User::guide');
+$routes->get('/admin/guide', 'Admin::guide');
+$routes->post('/admin/guide', 'Admin::guideUpdate');
 
 
 $routes->get('/admin/meetings', 'Admin::meetings');

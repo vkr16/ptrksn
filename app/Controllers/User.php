@@ -15,6 +15,7 @@ class User extends BaseController
     protected $eventfileModel;
     protected $meetingModel;
     protected $attendanceModel;
+    protected $tutorModel;
 
     function __construct()
     {
@@ -27,6 +28,7 @@ class User extends BaseController
         $this->eventfileModel = model('EventFileModel', true, $db);
         $this->meetingModel = model('MeetingModel', true, $db);
         $this->attendanceModel = model('AttendanceModel', true, $db);
+        $this->tutorModel = model('TutorModel', true, $db);
     }
 
     public function index()
@@ -238,18 +240,21 @@ class User extends BaseController
             foreach ($docs as $key => $file) {
                 $user_id = $file['user_id'];
                 $userUploaded = $this->userModel->where('id', $user_id)->find();
-                $filesData = [
-                    $key => [
-                        'id' => $file['id'],
-                        'uploader' => $userUploaded[0]['name'],
-                        'user_id' => $file['user_id'],
-                        'event_id' => $file['event_id'],
-                        'document_name' => $file['document_name'],
-                        'file_name' => $file['file_name'],
-                        'upload_time' => $file['upload_time']
-                    ],
-                ];
-                $arrayfiles = array_merge($arrayfiles, $filesData);
+                if ($userUploaded[0]['role'] == 'Admin' || $userUploaded[0]['id'] == $userData['id']) {
+
+                    $filesData = [
+                        $key => [
+                            'id' => $file['id'],
+                            'uploader' => $userUploaded[0]['name'],
+                            'user_id' => $file['user_id'],
+                            'event_id' => $file['event_id'],
+                            'document_name' => $file['document_name'],
+                            'file_name' => $file['file_name'],
+                            'upload_time' => $file['upload_time']
+                        ],
+                    ];
+                    $arrayfiles = array_merge($arrayfiles, $filesData);
+                }
             }
 
             $data = [
@@ -407,5 +412,29 @@ class User extends BaseController
         } else {
             return "failed";
         }
+    }
+
+    public function guide()
+    {
+        // Session Check
+        if ($this->session->has('fw2_webclient_session')) {
+            if ($this->session->get('fw2_webclient_role') == 'Admin') {
+                return redirect()->to(HOST_URL . '/admin');
+            }
+        } else {
+            return redirect()->to(HOST_URL . '/login');
+        }
+        // Session Check End
+
+        // On Session User Data
+        $userData = $this->userModel->find($this->session->get('fw2_webclient_session'));
+        $userGuide  = $this->tutorModel->find(1);
+
+        $data = [
+            'userData' => $userData,
+            'userGuide' => $userGuide['content']
+        ];
+
+        return view('user/guide', $data);
     }
 }

@@ -65,6 +65,7 @@
                                 <div class="card-header bg-green-custom text-light p-3 d-flex justify-content-between align-items-center">
                                     <p class="m-0"><i class="fa-solid fa-diagram-project"></i> &nbsp; Informasi Kegiatan</p>
                                     <span>
+                                        <a href="detail/topdf?id=<?= $project['id']; ?>" id="printButton" class="btn btn-sm btn-light"><i class="fa-solid fa-print"></i>&nbsp; Cetak / Ekspor PDF</a>
                                         <button id="deleteProjectButton" class="btn btn-sm btn-warning" onclick="deletePrompt(<?= $project['id']; ?>)"><i class="fa-solid fa-trash-alt"></i>&nbsp; Hapus Kegiatan</button>
                                         <button id="trigger-open" class="btn btn-sm btn-light" onclick="editMode()"><i class="fa-solid fa-file-pen"></i>&nbsp; Mode Edit</button>
                                         <button id="trigger-close" class="btn btn-sm btn-light" onclick="viewMode()" style="display: none"><i class="fa-solid fa-glasses"></i>&nbsp; Mode Baca</button>
@@ -179,7 +180,7 @@
                                             <input type="text" name="project_id" value="<?= $project['id']; ?>" hidden>
                                             <input type="text" name="user_id" value="<?= $userData['id']; ?>" hidden>
                                             <div class="input-group">
-                                                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" name="file2upload" aria-label="Upload">
+                                                <input required type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" name="file2upload" aria-label="Upload">
                                                 <button class="btn btn-green" type="submit" id="inputGroupFileAddon04">Unggah</button>
                                             </div>
                                         </form>
