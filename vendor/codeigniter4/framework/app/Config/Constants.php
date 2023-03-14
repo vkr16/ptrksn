@@ -92,11 +92,3 @@ define('EVENT_PRIORITY_NORMAL', 100);
  * @deprecated Use \CodeIgniter\Events\Events::PRIORITY_HIGH instead.
  */
 define('EVENT_PRIORITY_HIGH', 10);
-
-
-/**
- * Custom Constant Declared by Developer - FM
- */
-define('base_url()', 'http://' . $_SERVER['SERVER_NAME'] . '/fastwork-1');
-define('base_url('public/assets')', base_url() . '/public/assets');
-define('base_url('public/assets/img')', base_url('public/assets') . '/img');
