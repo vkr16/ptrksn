@@ -1,63 +1,99 @@
-# CodeIgniter 4 Application Starter
 
-## What is CodeIgniter?
+<p align="center">
+<img src="https://github.com/vkr16/ptrksn/blob/main/public/assets/img/a-logo.png?raw=true" alt"PTRKSN logo" width="20%"></img>
+<br>
+<div align="center">
+<img src="https://img.shields.io/badge/App Version-1.0-orange"></img> &nbsp; 
+<img src="https://img.shields.io/badge/PHP%20Version-7.4-blue"></img> &nbsp;
+<img src="https://img.shields.io/badge/CodeIgniter-4.2.4-red"></img> &nbsp;
+<img src="https://img.shields.io/badge/Bootstrap-5.2.0-blueviolet"></img> &nbsp;
+<img src="https://img.shields.io/badge/JQuery-3.6.1-blue"></img> &nbsp;
+</div>
+</p>
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](http://codeigniter.com).
+# Project Portfolio: PTRKSN
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Welcome to my portfolio project repository! This is a work of mine that I've done on the PTRKSN project as a freelancer.
 
-More information about the plans for version 4 can be found in [the announcement](http://forum.codeigniter.com/thread-62615.html) on the forums.
+# Project Overview
 
-The user guide corresponding to this version of the framework can be found
-[here](https://codeigniter4.github.io/userguide/).
+PTRKSN stands for "Perencanaan Tata Ruang Kawasan Strategis Nasional" which means National Strategic Area Spatial Planning. This is a special division of the ministry of agrarian and spatial planning of the Republic of Indonesia. 
 
-## Installation & updates
+This project aims to create a web application that functions as an intermediary platform between ministries in carrying out joint activities including meeting agendas and exchanging documents related to certain activities.
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+The main idea of this application is a system that can record any joint agenda or activities carried out within the ministry and then the agenda or activity can be used as a platform for exchanging information including recording the results of meetings and exchanging other related documents. This application also provides a meeting attendance recording system related to certain activities.
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+In this project, I was responsible for creating the development plan and develop the web application using PHP programming language and CodeIgniter 4 as the main back-end programming stack and also using HTML, CSS, Bootstrap, JavaScript, Jquery and some other js library to build it's front-end.
 
-## Setup
+# Project Details
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+Here are some of the details of the project:
 
-## Important Change with index.php
+- Client: Subdit Perencanaan Tata Ruang Kawasan Nasional III - Badan Pertanahan Nasional
+- Duration: around a week
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## Technologies
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+- PHP 7.4
+- CodeIgniter 4
+- HTML
+- CSS
+- JavaScript
+- Bootstrap 5.2.0
+- Some other JavaScript library
 
-**Please** read the user guide for a better explanation of how CI4 works!
+# Project Achievements
 
-## Repository Management
+Here are some of the key achievements of the project:
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+- Completing the project earlier than my estimation
+- Satisfied the client with the final results that exceed the client's expectations
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+# Project Challenges
 
-## Server Requirements
+Here are some of the challenges I faced while working on the project:
 
-PHP version 7.4 or higher is required, with the following extensions installed:
+- The challenge is how should I be able to design this application only with the initial idea from the client's explanation which is a bit unclear
+- The client is asking this project to be done within 1 week while my rough estimation at that time is about 2 weeks 
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+# Why I'm Sharing These Projects
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+I'm sharing these projects as part of my portfolio to showcase my skills and experience as a freelance developer. I hope that they demonstrate my ability to work with different clients and technologies and my commitment to delivering high-quality work.
 
-- json (enabled by default - don't turn it off)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
-- xml (enabled by default - don't turn it off)
+# How to Use This Project
+
+This project is meant to showcase my skills and experience as a freelance developer. You are welcome to explore the project and use it as inspiration for your own work.
+
+**<p style="color:#ff4444">However, please note that this project was done for a specific client and may not be suitable for your own needs. Please do not use any of the code or assets without permission especially for commercial use.</p>**
+
+## Installation Guide
+
+1. [Download the portfolio release here](https://github.com/vkr16/ptrksn/releases/tag/v1.0-portfolio)
+2. Extract the zip to your server or localhost directory
+3. Import `ptrksn.sql` to your database server
+4. Configure these variable in `.env` file
+   - `app.baseURL = [YOUR BASE URL HERE | example: http://localhost/ptrksn/]`
+   - `database.default.hostname = [YOUR DATABASE HOST | example: localhost]`
+   - `database.default.database = [YOUR DATABASE NAME | example: ptrksn]`
+   - `database.default.username = [YOUR DATABASE USERNAME | example: root]`
+   - `database.default.password = [YOUR DATABASE PASSWORD | example: root]`
+
+## Basic Usage Guide
+
+1. Run the application by accessing the base url
+2. The first page you will see is the login page
+3. Login with an account
+   - Pre-registered administrator account :
+     - `Email = admin@akuonline.my.id`
+     - `Password = admin`
+5. You can explore the rest of the features on this application by yourself
+
+# Contact Me
+
+If you have any questions about this project or would like to discuss a potential freelance opportunity, please feel free to contact me. My email address is fikri.droid16@gmail.com or visit my web page at [akuonline.my.id](https://akuonline.my.id).
+
+Thank you for taking the time to review my project portfolio!
+
+<hr>
+<p align="center">&copy; 2022 Fikri Miftah Akmaludin </p>
+
