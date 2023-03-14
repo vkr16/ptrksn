@@ -92,8 +92,3 @@ define('EVENT_PRIORITY_NORMAL', 100);
  * @deprecated Use \CodeIgniter\Events\Events::PRIORITY_HIGH instead.
  */
 define('EVENT_PRIORITY_HIGH', 10);
-
-
-define('HOST_URL', 'http://' . $_SERVER['SERVER_NAME'] . ':8074/ptrksn');
-define('ASSETS_URL', HOST_URL . '/public/assets');
-define('IMAGES_URL', ASSETS_URL . '/img');

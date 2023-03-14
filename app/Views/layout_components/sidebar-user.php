@@ -2,23 +2,23 @@
     <div class="offcanvas-lg offcanvas-start custom-sidebar bg-green-custom text-light" data-bs-scroll="true" tabindex="-1" id="sidebarPanelOffCanvas" aria-labelledby="sidebarPanelOffCanvasLabel">
         <div class="custom-sidebar bg-green-custom text-light vh-100 scrollable-y hide-scrollbar px-2">
             <a href="#home" class="py-3 mb-3 container-fluid d-flex gap-2 align-items-center sticky-top bg-green-custom text-light border-bottom border-light border-opacity-25 text-decoration-none" id="sidebar-header" style="z-index: 2000">
-                <img src="<?= IMAGES_URL ?>/logo-banner.png" class="w-100" alt="">
+                <img src="<?= base_url('public/assets/img') ?>/logo-banner.png" class="w-100" alt="">
 
             </a>
 
             <ul class="list-unstyled m-0 p-0">
                 <li>
-                    <a href="<?= HOST_URL ?>/user/projects" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light  sidebar-active" id="sidebar-item-projects">
+                    <a href="<?= base_url() ?>/user/projects" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light  sidebar-active" id="sidebar-item-projects">
                         <div class=" m-0"> <i class="fa-solid fa-diagram-project"></i> &nbsp; Kegiatan</div>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= HOST_URL ?>/user/meetings" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light sidebar-item" id="sidebar-item-meetings">
+                    <a href="<?= base_url() ?>/user/meetings" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light sidebar-item" id="sidebar-item-meetings">
                         <div class=" m-0"> <i class="fa-solid fa-clipboard-check fa-fw"></i> &nbsp; Data Kehadiran</div>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= HOST_URL ?>/user/guide" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light sidebar-item " id="sidebar-item-guide">
+                    <a href="<?= base_url() ?>/user/guide" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light sidebar-item " id="sidebar-item-guide">
                         <div class=" m-0"> <i class="fa-solid fa-circle-question fa-fw"></i> &nbsp; Panduan Pengguna</div>
                     </a>
                 </li>
@@ -38,7 +38,7 @@
                     </div>
                 </li> -->
                 <!-- <li>
-                    <a href="<?= HOST_URL ?>/admin/users" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light sidebar-item " id="sidebar-item-users">
+                    <a href="<?= base_url() ?>/admin/users" class="mb-2 px-3 py-2 rounded container-fluid d-flex gap-2 align-items-center sticky-top text-light sidebar-item " id="sidebar-item-users">
                         <div class=" m-0"> <i class="fa-solid fa-users-gear"></i> &nbsp; User Accounts</div>
                     </a>
                 </li> -->

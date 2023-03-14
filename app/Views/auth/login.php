@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('public/assets/img') ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
@@ -15,7 +15,7 @@
     <script src="https://kit.fontawesome.com/e4b7aab4db.js" crossorigin="anonymous"></script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/main.css" />
 
 
 </head>
@@ -61,7 +61,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <!-- Notiflix -->
-        <script src="<?= ASSETS_URL ?>/js/notiflix-aio-3.2.5.min.js"></script>
+        <script src="<?= base_url('public/assets') ?>/js/notiflix-aio-3.2.5.min.js"></script>
     </body>
 
 </html>

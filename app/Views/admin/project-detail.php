@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Admin | Detail Kegiatan</title>
-    <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('public/assets/img') ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
@@ -15,10 +15,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
 
     <!-- Datepicker -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/bootstrap-datepicker3.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/main.css" />
 
     <!-- TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/byl4oikuvknydm7bl5aijyvsqxt16dkq9z0mtj35dibykwna/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -52,7 +52,7 @@
                         <nav aria-label="breadcrumb" class="m-0">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">Admin</li>
-                                <li class="breadcrumb-item"><a href="<?= HOST_URL ?>/admin/projects">Kegiatan</a></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url() ?>/admin/projects">Kegiatan</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Detail Kegiatan</li>
                             </ol>
                         </nav>
@@ -74,7 +74,7 @@
                                 <div class="card-body p-2 p-sm-3 table-responsive">
                                     <div class="">
 
-                                        <form action="<?= HOST_URL ?>/admin/projects/update" method="POST">
+                                        <form action="<?= base_url() ?>/admin/projects/update" method="POST">
                                             <input type="text" name="project_id" hidden value="<?= $project['id']; ?>">
                                             <p class="fw-semibold m-0 p-0 " id="name">
                                                 <span id="name-static"><?= $project['name']; ?></span>
@@ -124,7 +124,7 @@
                                                         <td><?= $event['name']; ?></td>
                                                         <td><?= date_format(date_create($event['commit_time']), "d-m-Y"); ?></td>
                                                         <td class="d-flex justify-content-between align-items-center">
-                                                            <a href="<?= HOST_URL ?>/admin/projects/event?p=<?= $project['id']; ?>&e=<?= $event['id']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-folder"></i>&nbsp; Lihat Dokumen</a>
+                                                            <a href="<?= base_url() ?>/admin/projects/event?p=<?= $project['id']; ?>&e=<?= $event['id']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-folder"></i>&nbsp; Lihat Dokumen</a>
                                                             <div class="dropdown me-4 mt-1">
                                                                 <button class="btn btn-sm" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                                                 <ul class="dropdown-menu">
@@ -167,8 +167,8 @@
                                                         <td><?= $file['uploader']; ?></td>
                                                         <td><?= date_format(date_create($file['upload_time']), "d-m-Y H:i A"); ?></td>
                                                         <td>
-                                                            <a href="<?= HOST_URL ?>/admin/projects/delete?filename=<?= $file['file_name']; ?>&id=<?= $project['id']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Hapus</a>
-                                                            <a target="_blank" href="<?= HOST_URL ?>/admin/projects/download?filename=<?= $file['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Unduh</a>
+                                                            <a href="<?= base_url() ?>/admin/projects/delete?filename=<?= $file['file_name']; ?>&id=<?= $project['id']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Hapus</a>
+                                                            <a target="_blank" href="<?= base_url() ?>/admin/projects/download?filename=<?= $file['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Unduh</a>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
@@ -176,7 +176,7 @@
                                         </table>
                                     </div>
                                     <div class="mt-2">
-                                        <form action="<?= HOST_URL ?>/admin/projects/upload" method="POST" enctype="multipart/form-data">
+                                        <form action="<?= base_url() ?>/admin/projects/upload" method="POST" enctype="multipart/form-data">
                                             <input type="text" name="project_id" value="<?= $project['id']; ?>" hidden>
                                             <input type="text" name="user_id" value="<?= $userData['id']; ?>" hidden>
                                             <div class="input-group">
@@ -219,7 +219,7 @@
                                     </div>
                                     <div>
                                         <hr>
-                                        <form action="<?= HOST_URL ?>/admin/projects/addComment" method="POST">
+                                        <form action="<?= base_url() ?>/admin/projects/addComment" method="POST">
 
                                             <input type="text" name="userid" hidden value="<?= $userData['id']; ?>">
                                             <input type="text" name="id" hidden value="<?= $project['id']; ?>">
@@ -318,11 +318,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Notiflix -->
-    <script src="<?= ASSETS_URL ?>/js/notiflix-aio-3.2.5.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/notiflix-aio-3.2.5.min.js"></script>
 
     <!-- Datepicker -->
-    <script src="<?= ASSETS_URL ?>/js/bootstrap-datepicker.min.js"></script>
-    <script src="<?= ASSETS_URL ?>/js/bootstrap-datepicker.id.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/bootstrap-datepicker.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/bootstrap-datepicker.id.min.js"></script>
 
     <!-- Datatables JS -->
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>

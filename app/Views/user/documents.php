@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Dokumen Kegiatan <?= isset($_GET['pak']) ? 'PAK' : 'Harmonisasi'; ?></title>
-    <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('public/assets/img') ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/main.css" />
 
     <!-- TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/byl4oikuvknydm7bl5aijyvsqxt16dkq9z0mtj35dibykwna/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -54,8 +54,8 @@
                         <nav aria-label="breadcrumb" class="m-0">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">Admin</li>
-                                <li class="breadcrumb-item"><a href="<?= HOST_URL ?>/user/projects">Kegiatan</a></li>
-                                <li class="breadcrumb-item"><a href="<?= HOST_URL ?>/user/projects/detail?id=<?= $_GET['p']; ?>">Acara</a></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url() ?>/user/projects">Kegiatan</a></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url() ?>/user/projects/detail?id=<?= $_GET['p']; ?>">Acara</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Dokumen Acara</li>
                             </ol>
                         </nav>
@@ -96,10 +96,10 @@
                                                     <td><?= $file['uploader']; ?></td>
                                                     <td><?= date_format(date_create($file['upload_time']), "d-m-Y H:i A"); ?></td>
                                                     <td>
-                                                        <a target="_blank" href="<?= HOST_URL ?>/admin/projects/events/download?filename=<?= $file['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Unduh</a>
+                                                        <a target="_blank" href="<?= base_url() ?>/admin/projects/events/download?filename=<?= $file['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Unduh</a>
                                                         <?php if ($file['user_id'] == $userData['id']) {
                                                         ?>
-                                                            <a href="<?= HOST_URL ?>/admin/projects/events/delete?u=true&filename=<?= $file['file_name']; ?>&e=<?= $event[0]['id']; ?>&p=<?= $_GET['p']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Hapus</a>
+                                                            <a href="<?= base_url() ?>/admin/projects/events/delete?u=true&filename=<?= $file['file_name']; ?>&e=<?= $event[0]['id']; ?>&p=<?= $_GET['p']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Hapus</a>
                                                         <?php
                                                         } ?>
                                                     </td>
@@ -111,7 +111,7 @@
                                         </tbody>
                                     </table>
                                     <div class="mt-4">
-                                        <form action="<?= HOST_URL ?>/admin/projects/eventdocs/upload" method="POST" enctype="multipart/form-data">
+                                        <form action="<?= base_url() ?>/admin/projects/eventdocs/upload" method="POST" enctype="multipart/form-data">
                                             <input type="text" name="u" value="true>" hidden>
                                             <input type="text" name="event_id" value="<?= $_GET['e']; ?>" hidden>
                                             <input type="text" name="project_id" value="<?= $_GET['p']; ?>" hidden>
@@ -144,7 +144,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Notiflix -->
-    <script src="<?= ASSETS_URL ?>/js/notiflix-aio-3.2.5.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/notiflix-aio-3.2.5.min.js"></script>
 
     <!-- Datatables JS -->
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>

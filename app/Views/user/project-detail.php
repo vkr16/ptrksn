@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Detail Kegiatan</title>
-    <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('public/assets/img') ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/main.css" />
 
     <!-- TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/byl4oikuvknydm7bl5aijyvsqxt16dkq9z0mtj35dibykwna/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -106,7 +106,7 @@
                                                         <td><?= $event['name']; ?></td>
                                                         <td><?= date_format(date_create($event['commit_time']), "d-m-Y"); ?></td>
                                                         <td>
-                                                            <a href="<?= HOST_URL ?>/user/projects/event?p=<?= $project['id']; ?>&e=<?= $event['id']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-folder"></i>&nbsp; Lihat Dokumen</a>
+                                                            <a href="<?= base_url() ?>/user/projects/event?p=<?= $project['id']; ?>&e=<?= $event['id']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-folder"></i>&nbsp; Lihat Dokumen</a>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
@@ -143,10 +143,10 @@
                                                         <td><?= $file['uploader']; ?></td>
                                                         <td><?= date_format(date_create($file['upload_time']), "d/m/Y H:i A"); ?></td>
                                                         <td>
-                                                            <a target="_blank" href="<?= HOST_URL ?>/user/projects/download?filename=<?= $file['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Unduh</a>
+                                                            <a target="_blank" href="<?= base_url() ?>/user/projects/download?filename=<?= $file['file_name']; ?>" class="btn btn-sm btn-green"><i class="fa-solid fa-download"></i> Unduh</a>
                                                             <?php if ($file['user_id'] == $userData['id']) {
                                                             ?>
-                                                                <a href="<?= HOST_URL ?>/admin/projects/delete?u=true&filename=<?= $file['file_name']; ?>&id=<?= $project['id']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Hapus</a>
+                                                                <a href="<?= base_url() ?>/admin/projects/delete?u=true&filename=<?= $file['file_name']; ?>&id=<?= $project['id']; ?>" class=" btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i> Hapus</a>
                                                             <?php
                                                             } ?>
                                                         </td>
@@ -156,7 +156,7 @@
                                         </table>
                                     </div>
                                     <div class="mt-2">
-                                        <form action="<?= HOST_URL ?>/user/projects/upload" method="POST" enctype="multipart/form-data">
+                                        <form action="<?= base_url() ?>/user/projects/upload" method="POST" enctype="multipart/form-data">
                                             <input type="text" name="project_id" value="<?= $project['id']; ?>" hidden>
                                             <input type="text" name="user_id" value="<?= $userData['id']; ?>" hidden>
                                             <div class="input-group">
@@ -189,7 +189,7 @@
                                     </div>
                                     <div>
                                         <hr>
-                                        <form action="<?= HOST_URL ?>/user/projects/addComment" method="POST">
+                                        <form action="<?= base_url() ?>/user/projects/addComment" method="POST">
 
                                             <input type="text" name="userid" hidden value="<?= $userData['id']; ?>">
                                             <input type="text" name="id" hidden value="<?= $project['id']; ?>">

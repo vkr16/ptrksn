@@ -36,10 +36,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -62,10 +62,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'Admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -133,10 +133,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'Admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -150,7 +150,7 @@ class User extends BaseController
             'project_id' => $project_id
         ];
         $this->commentModel->insert($data);
-        return redirect()->to(HOST_URL . '/user/projects/detail?id=' . $project_id);
+        return redirect()->to(base_url() . '/user/projects/detail?id=' . $project_id);
     }
 
     public function projectsUpload()
@@ -158,10 +158,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'Admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -182,7 +182,7 @@ class User extends BaseController
 
         if ($file->move("public/uploads/", $newName)) {
             $this->projectfileModel->insert($data);
-            return redirect()->to(HOST_URL . '/user/projects/detail?id=' . $project_id);
+            return redirect()->to(base_url() . '/user/projects/detail?id=' . $project_id);
         } else {
             echo "failed";
         }
@@ -193,10 +193,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'Admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -219,10 +219,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -265,7 +265,7 @@ class User extends BaseController
 
             return view('user/documents', $data);
         } else {
-            return redirect()->to(HOST_URL);
+            return redirect()->to(base_url());
         }
     }
 
@@ -274,10 +274,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -305,10 +305,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -358,7 +358,7 @@ class User extends BaseController
 
             return view('user/attendance', $data);
         } else {
-            return redirect()->to(HOST_URL . '/user/meetings');
+            return redirect()->to(base_url() . '/user/meetings');
         }
     }
 
@@ -367,10 +367,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -399,7 +399,7 @@ class User extends BaseController
     {
         // Session Check
         if (!$this->session->has('fw2_webclient_session')) {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 
@@ -419,10 +419,10 @@ class User extends BaseController
         // Session Check
         if ($this->session->has('fw2_webclient_session')) {
             if ($this->session->get('fw2_webclient_role') == 'Admin') {
-                return redirect()->to(HOST_URL . '/admin');
+                return redirect()->to(base_url() . '/admin');
             }
         } else {
-            return redirect()->to(HOST_URL . '/login');
+            return redirect()->to(base_url() . '/login');
         }
         // Session Check End
 

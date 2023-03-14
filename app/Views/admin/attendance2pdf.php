@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Admin | Daftar Kehadiran </title>
-    <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('public/assets/img') ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/main.css" />
 
 </head>
 
@@ -23,7 +23,7 @@
 
     <div class="mx-2" id="printbody">
         <div class="mt-3" style="height:80px">
-            <img src="<?= IMAGES_URL ?>/logo-banner-dark.png" style="height:80px" alt="">
+            <img src="<?= base_url('public/assets/img') ?>/logo-banner-dark.png" style="height:80px" alt="">
         </div>
         <hr>
         <p class="fs-5 fw-semibold">Dokumen Rekapitulasi Daftar Kehadiran</p>
@@ -87,7 +87,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- HTML2PDF -->
-    <script src="<?= ASSETS_URL ?>/js/html2pdf/html2pdf.bundle.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/html2pdf/html2pdf.bundle.min.js"></script>
 
     <script>
         $(document).ready(function() {

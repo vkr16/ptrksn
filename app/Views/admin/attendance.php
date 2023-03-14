@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Admin | Daftar Kehadiran </title>
-    <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('public/assets/img') ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
@@ -15,10 +15,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
 
     <!-- Datepicker -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/bootstrap-datepicker3.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/main.css" />
 
     <!-- TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/byl4oikuvknydm7bl5aijyvsqxt16dkq9z0mtj35dibykwna/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -57,7 +57,7 @@
                         <nav aria-label="breadcrumb" class="m-0">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">Admin</li>
-                                <li class="breadcrumb-item"><a href="<?= HOST_URL ?>/admin/meetings">Daftar Pertemuan</a></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url() ?>/admin/meetings">Daftar Pertemuan</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Daftar Hadir</li>
                             </ol>
                         </nav>
@@ -182,11 +182,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Datepicker -->
-    <script src="<?= ASSETS_URL ?>/js/bootstrap-datepicker.min.js"></script>
-    <script src="<?= ASSETS_URL ?>/js/bootstrap-datepicker.id.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/bootstrap-datepicker.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/bootstrap-datepicker.id.min.js"></script>
 
     <!-- Notiflix -->
-    <script src="<?= ASSETS_URL ?>/js/notiflix-aio-3.2.5.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/notiflix-aio-3.2.5.min.js"></script>
 
     <!-- Datatables JS -->
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
@@ -250,7 +250,7 @@
                 'Lanjutkan',
                 'Batal',
                 () => {
-                    $.post("<?= HOST_URL; ?>/user/meetings/attendance/void", {
+                    $.post("<?= base_url(); ?>/user/meetings/attendance/void", {
                             user_id: uid,
                             meeting_id: mid
                         })

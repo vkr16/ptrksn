@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Admin | Akun Pengguna</title>
-    <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('public/assets/img') ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/main.css" />
 
 
 </head>
@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="card-body p-2 p-sm-3 table-responsive">
                                     <div class="">
-                                        <form action="<?= HOST_URL ?>/admin/users/add" method="POST">
+                                        <form action="<?= base_url() ?>/admin/users/add" method="POST">
                                             <div class="mb-3">
                                                 <label for="InputName1" class="form-label">Nama Lengkap</label>
                                                 <input type="text" class="form-control" id="InputName1" name="name" placeholder="Nama Lengkap">
@@ -204,7 +204,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?= HOST_URL ?>/admin/users/update" method="POST">
+                    <form action="<?= base_url() ?>/admin/users/update" method="POST">
                         <input type="text" hidden id="updateid" name="id">
                         <div class="mb-3">
                             <label for="InputName2" class="form-label">Nama Lengkap</label>
@@ -300,7 +300,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?= HOST_URL ?>/admin/users/resetPassword" method="POST">
+                    <form action="<?= base_url() ?>/admin/users/resetPassword" method="POST">
                         <input type="text" hidden id="resetid" name="id">
                         <div class="mb-3">
                             <label for="InputPassword3" class="form-label">Kata Sandi Baru</label>
@@ -326,7 +326,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Notiflix -->
-    <script src="<?= ASSETS_URL ?>/js/notiflix-aio-3.2.5.min.js"></script>
+    <script src="<?= base_url('public/assets') ?>/js/notiflix-aio-3.2.5.min.js"></script>
 
     <!-- Datatables JS -->
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>

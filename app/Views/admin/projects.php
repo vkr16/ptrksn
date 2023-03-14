@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Admin | Kegiatan </title>
-    <link rel="shortcut icon" href="<?= IMAGES_URL ?>/a-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('public/assets/img') ?>/a-logo.png" type="image/x-icon">
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/main.css" />
+    <link rel="stylesheet" href="<?= base_url('public/assets') ?>/css/main.css" />
 
     <!-- TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/byl4oikuvknydm7bl5aijyvsqxt16dkq9z0mtj35dibykwna/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -75,7 +75,7 @@
                                                         <td><?= $project['name']; ?></td>
                                                         <td></td>
                                                         <td>
-                                                            <a class="btn btn-sm btn-green" href="<?= HOST_URL ?>/admin/projects/detail?id=<?= $project['id']; ?>">Lihat Detail</a>
+                                                            <a class="btn btn-sm btn-green" href="<?= base_url() ?>/admin/projects/detail?id=<?= $project['id']; ?>">Lihat Detail</a>
                                                         </td>
                                                     </tr>
                                                 <?php }
@@ -93,7 +93,7 @@
                                     <button class="btn btn-light btn-sm" onclick="$('#newProjectPanel').hide()"><i class="fa-solid fa-times fa-fw"></i></button>
                                 </div>
                                 <div class="card-body p-2 p-sm-3">
-                                    <form action="<?= HOST_URL ?>/admin/projects/add" method="POST">
+                                    <form action="<?= base_url() ?>/admin/projects/add" method="POST">
                                         <div class="mb-3">
                                             <label for="projectName" class="form-label">Nama Kegiatan</label>
                                             <input type="text" class="form-control" id="projectName" name="name">
