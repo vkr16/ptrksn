@@ -1,4 +1,6 @@
-
+# NOTICE : DEVELOPMENT WAS MOVED TO GITLAB
+Repository ini mungkin akan tertinggal beberapa versi lebih lambat dan tidak rutin di update karena repository utama development dipindahkan ke gitlab. untuk versi terbaru silahkan merujuk ke  [Gitlab Repository](https://gitlab.com/vkr16/ptrksn)
+<hr>
 <p align="center">
 <img src="https://github.com/vkr16/ptrksn/blob/main/public/assets/img/a-logo.png?raw=true" alt"PTRKSN logo" width="20%"></img>
 <br>
